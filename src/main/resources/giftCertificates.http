@@ -3,7 +3,7 @@ GET http://localhost:8080/giftCertificates
 Accept: application/json
 
 ###findById
-GET http://localhost:8080/giftCertificates/3
+GET http://localhost:8080/giftCertificates/1
 Accept: application/json
 
 ###save
@@ -34,5 +34,5 @@ Content-Type: application/json
 }
 
 ###delete
-DELETE http://localhost:8080/giftCertificates/5
+DELETE http://localhost:8080/giftCertificates/9
 Content-Type: application/json

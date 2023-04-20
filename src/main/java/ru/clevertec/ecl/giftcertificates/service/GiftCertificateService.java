@@ -1,18 +1,18 @@
 package ru.clevertec.ecl.giftcertificates.service;
 
-import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
+import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateDto;
 
 import java.util.List;
 
 public interface GiftCertificateService {
 
-    List<GiftCertificate> findAll();
+    List<GiftCertificateDto> findAll();
 
-    GiftCertificate findById(Long id);
+    GiftCertificateDto findById(Long id);
 
-    GiftCertificate save(GiftCertificate giftCertificate);
+    GiftCertificateDto save(GiftCertificateDto giftCertificateDto);
 
-    GiftCertificate update(GiftCertificate giftCertificate);
+    GiftCertificateDto update(GiftCertificateDto giftCertificateDto);
 
     void delete(Long id);
 

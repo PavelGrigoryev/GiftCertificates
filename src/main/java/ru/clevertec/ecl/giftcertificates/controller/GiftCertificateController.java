@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
+import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateDto;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 
 import java.util.List;
@@ -24,23 +24,23 @@ public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
 
     @GetMapping
-    public ResponseEntity<List<GiftCertificate>> findAll() {
+    public ResponseEntity<List<GiftCertificateDto>> findAll() {
         return ResponseEntity.ok(giftCertificateService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GiftCertificate> findById(@PathVariable Long id) {
+    public ResponseEntity<GiftCertificateDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<GiftCertificate> save(@RequestBody GiftCertificate giftCertificate) {
+    public ResponseEntity<GiftCertificateDto> save(@RequestBody GiftCertificateDto giftCertificate) {
         return ResponseEntity.status(HttpStatus.CREATED).body(giftCertificateService.save(giftCertificate));
     }
 
     @PutMapping
-    public ResponseEntity<GiftCertificate> update(@RequestBody GiftCertificate giftCertificate) {
-        return ResponseEntity.ok(giftCertificateService.update(giftCertificate));
+    public ResponseEntity<GiftCertificateDto> update(@RequestBody GiftCertificateDto giftCertificateDto) {
+        return ResponseEntity.ok(giftCertificateService.update(giftCertificateDto));
     }
 
     @DeleteMapping("/{id}")
