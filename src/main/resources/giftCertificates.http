@@ -1,0 +1,38 @@
+###findAll
+GET http://localhost:8080/giftCertificates
+Accept: application/json
+
+###findById
+GET http://localhost:8080/giftCertificates/3
+Accept: application/json
+
+###save
+POST http://localhost:8080/giftCertificates
+Content-Type: application/json
+
+{
+  "name": "Gift",
+  "description": "Very Big",
+  "price": 10,
+  "duration": 3,
+  "create_date": "2023-04-19 18:16:53.803603",
+  "last_update_date": "2023-04-19 18:16:53.803603"
+}
+
+###update
+POST http://localhost:8080/giftCertificates
+Content-Type: application/json
+
+{
+  "id": 7,
+  "name": "Gift",
+  "description": "Very Big",
+  "price": 10,
+  "duration": 3,
+  "create_date": "2023-04-19 18:16:53.803603",
+  "last_update_date": "2023-04-19 18:16:53.803603"
+}
+
+###delete
+DELETE http://localhost:8080/giftCertificates/5
+Content-Type: application/json
