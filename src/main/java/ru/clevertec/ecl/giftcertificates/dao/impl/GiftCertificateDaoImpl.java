@@ -25,7 +25,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public List<GiftCertificate> findAll() {
         return jdbcTemplate.query(
-                "SELECT * FROM gift_certificates",
+                "SELECT * FROM gift_certificate",
                 this::mapRowToGiftCertificate
         );
     }
@@ -33,7 +33,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public Optional<GiftCertificate> findById(Long id) {
         List<GiftCertificate> giftCertificates = jdbcTemplate.query(
-                "SELECT * FROM gift_certificates WHERE id = ?",
+                "SELECT * FROM gift_certificate WHERE id = ?",
                 this::mapRowToGiftCertificate,
                 id
         );
@@ -48,7 +48,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement = con.prepareStatement(
                     """
-                            INSERT INTO gift_certificates (name, description, price, duration, create_date, last_update_date)
+                            INSERT INTO gift_certificate (name, description, price, duration, create_date, last_update_date)
                             VALUES (?, ?, ?, ?, ?, ?)
                             """,
                     Statement.RETURN_GENERATED_KEYS
@@ -67,7 +67,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement = con.prepareStatement(
                     """
-                            UPDATE gift_certificates
+                            UPDATE gift_certificate
                             SET name = ?, description = ?, price = ?, duration = ?, create_date = ?, last_update_date = ?
                             WHERE id = ?
                             """,
@@ -85,7 +85,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public Integer delete(Long id) {
         return jdbcTemplate.update(
-                "DELETE FROM gift_certificates WHERE id = ?",
+                "DELETE FROM gift_certificate WHERE id = ?",
                 id
         );
     }
