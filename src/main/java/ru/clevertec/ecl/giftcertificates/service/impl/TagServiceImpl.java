@@ -56,17 +56,15 @@ public class TagServiceImpl implements TagService {
         Tag tag = tagMapper.fromDto(tagDto);
         Tag updated = tagDao.update(tag);
         TagDto updatedDto = tagMapper.toDto(updated);
-        log.info("save {}", updatedDto);
+        log.info("update {}", updatedDto);
         return updatedDto;
     }
 
     @Override
     public void delete(Long id) {
-        Integer delete = tagDao.delete(id);
-        if (delete == 0) {
-            throw new NoSuchTagException("There is no Tag with ID " + id + " to delete");
-        }
-        log.info("delete #{}", id);
+        Tag tag = tagDao.delete(id)
+                .orElseThrow(() -> new NoSuchTagException("There is no Tag with ID " + id + " to delete"));
+        log.info("delete {}", tag);
     }
 
 }

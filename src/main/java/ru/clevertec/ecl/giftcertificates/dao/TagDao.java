@@ -15,6 +15,6 @@ public interface TagDao {
 
     Tag update(Tag tag);
 
-    Integer delete(Long id);
+    Optional<Tag> delete(Long id);
 
 }

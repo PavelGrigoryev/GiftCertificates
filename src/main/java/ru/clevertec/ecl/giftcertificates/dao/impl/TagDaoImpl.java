@@ -1,100 +1,74 @@
 package ru.clevertec.ecl.giftcertificates.dao.impl;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.ecl.giftcertificates.dao.TagDao;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class TagDaoImpl implements TagDao {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory;
 
     @Override
     public List<Tag> findAll() {
-        return jdbcTemplate.query(
-                "SELECT * FROM tag",
-                this::mapRowToTag
-        );
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+            Root<Tag> root = criteriaQuery.from(Tag.class);
+            criteriaQuery.select(root);
+            return session.createQuery(criteriaQuery).getResultList();
+        }
     }
 
     @Override
     public Optional<Tag> findById(Long id) {
-        List<Tag> tags = jdbcTemplate.query(
-                "SELECT * FROM tag WHERE id = ?",
-                this::mapRowToTag,
-                id
-        );
-        return tags.isEmpty()
-                ? Optional.empty()
-                : Optional.of(tags.get(0));
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.get(Tag.class, id));
+        }
     }
 
     @Override
     public Tag save(Tag tag) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con -> {
-            PreparedStatement preparedStatement = con.prepareStatement(
-                    """
-                            INSERT INTO tag (name)
-                            VALUES (?)
-                            """,
-                    Statement.RETURN_GENERATED_KEYS
-            );
-            preparedStatement.setString(1, tag.getName());
-            return preparedStatement;
-        }, keyHolder);
-        long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
-        tag.setId(id);
-        return tag;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(tag);
+            session.getTransaction().commit();
+            return tag;
+        }
     }
 
     @Override
     public Tag update(Tag tag) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con -> {
-            PreparedStatement preparedStatement = con.prepareStatement(
-                    """
-                            UPDATE tag
-                            SET name = ?
-                            WHERE id = ?
-                            """,
-                    Statement.RETURN_GENERATED_KEYS
-            );
-            preparedStatement.setString(1, tag.getName());
-            preparedStatement.setLong(2, tag.getId());
-            return preparedStatement;
-        }, keyHolder);
-        long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
-        tag.setId(id);
-        return tag;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Tag merged = session.merge(tag);
+            session.getTransaction().commit();
+            return merged;
+        }
     }
 
     @Override
-    public Integer delete(Long id) {
-        return jdbcTemplate.update(
-                "DELETE FROM tag WHERE id = ?",
-                id
-        );
-    }
-
-    private Tag mapRowToTag(ResultSet resultSet, int rowNum) throws SQLException {
-        return Tag.builder()
-                .id(resultSet.getLong("id"))
-                .name(resultSet.getString("name"))
-                .build();
+    public Optional<Tag> delete(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Optional<Tag> tag = findById(id);
+            if (tag.isEmpty()) {
+                return Optional.empty();
+            }
+            session.remove(tag.get());
+            session.getTransaction().commit();
+            return tag;
+        }
     }
 
 }

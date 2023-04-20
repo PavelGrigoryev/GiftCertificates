@@ -11,6 +11,7 @@ import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateDto save(GiftCertificateDto giftCertificateDto) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromDto(giftCertificateDto);
+        giftCertificate.setCreateDate(LocalDateTime.now());
+        giftCertificate.setLastUpdateDate(LocalDateTime.now());
         GiftCertificate saved = giftCertificateDao.save(giftCertificate);
         GiftCertificateDto savedDto = giftCertificateMapper.toDto(saved);
         log.info("save {}", savedDto);
@@ -54,6 +57,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateDto update(GiftCertificateDto giftCertificateDto) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromDto(giftCertificateDto);
+        giftCertificate.setCreateDate(findById(giftCertificate.getId()).getCreateDate());
+        giftCertificate.setLastUpdateDate(LocalDateTime.now());
         GiftCertificate updated = giftCertificateDao.update(giftCertificate);
         GiftCertificateDto updatedDto = giftCertificateMapper.toDto(updated);
         log.info("update {}", updatedDto);
@@ -62,11 +67,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public void delete(Long id) {
-        Integer delete = giftCertificateDao.delete(id);
-        if (delete == 0) {
-            throw new NoSuchGiftCertificateException("There is no GiftCertificate with ID " + id + " to delete");
-        }
-        log.info("delete #{}", id);
+        GiftCertificate giftCertificate = giftCertificateDao.delete(id)
+                .orElseThrow(() ->
+                        new NoSuchGiftCertificateException("There is no GiftCertificate with ID " + id + " to delete"));
+        log.info("delete {}", giftCertificate);
     }
 
 }

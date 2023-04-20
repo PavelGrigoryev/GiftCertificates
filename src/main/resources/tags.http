@@ -1,0 +1,28 @@
+###findAll
+GET http://localhost:8080/tags
+Accept: application/json
+
+###findById
+GET http://localhost:8080/tags/6
+Accept: application/json
+
+###save
+POST http://localhost:8080/tags
+Content-Type: application/json
+
+{
+  "name": "Surprise"
+}
+
+###update
+PUT http://localhost:8080/tags
+Content-Type: application/json
+
+{
+  "id": 3,
+  "name": "Banana"
+}
+
+###delete
+DELETE http://localhost:8080/tags/11
+Content-Type: application/json
