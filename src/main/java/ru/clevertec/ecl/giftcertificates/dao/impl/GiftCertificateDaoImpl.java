@@ -32,7 +32,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public List<GiftCertificate> findByTagName(String tagName) {
+    public List<GiftCertificate> findAllByTagName(String tagName) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("SELECT gc FROM GiftCertificate gc JOIN gc.tags t WHERE t.name = :tagName",
                             GiftCertificate.class)
@@ -42,12 +42,20 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public List<GiftCertificate> findByPartOfNameOrDescription(String part) {
+    public List<GiftCertificate> findAllByPartOfNameOrDescription(String part) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM GiftCertificate WHERE name LIKE :part OR description LIKE :part",
                             GiftCertificate.class)
                     .setParameter("part", "%" + part + "%")
                     .getResultList();
+        }
+    }
+
+    @Override
+    public List<GiftCertificate> findAllSortedByCreateDateAndName(boolean asc) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM GiftCertificate ORDER BY createDate " + (asc ? "ASC" : "DESC")
+                                       + ", name " + (asc ? "ASC" : "DESC"), GiftCertificate.class).getResultList();
         }
     }
 

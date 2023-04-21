@@ -6,12 +6,16 @@ Accept: application/json
 GET http://localhost:8080/giftCertificates/1
 Accept: application/json
 
-###findByTagName
-GET http://localhost:8080/giftCertificates/findByTagName/Coca-cola
+###findAllByTagName
+GET http://localhost:8080/giftCertificates/findAllByTagName/Coca-cola
 Accept: application/json
 
-###findByPartOfNameOrDescription
-GET http://localhost:8080/giftCertificates/findByPartOfNameOrDescription/Little
+###findAllByPartOfNameOrDescription
+GET http://localhost:8080/giftCertificates/findAllByPartOfNameOrDescription/Little
+Accept: application/json
+
+###findAllSortedByCreateDateAndName
+GET http://localhost:8080/giftCertificates/findAllSortedByCreateDateAndName/false
 Accept: application/json
 
 ###save

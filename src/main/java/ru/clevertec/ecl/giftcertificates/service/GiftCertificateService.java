@@ -11,9 +11,11 @@ public interface GiftCertificateService {
 
     GiftCertificateResponse findById(Long id);
 
-    List<GiftCertificateResponse> findByTagName(String tagName);
+    List<GiftCertificateResponse> findAllByTagName(String tagName);
 
-    List<GiftCertificateResponse> findByPartOfNameOrDescription(String part);
+    List<GiftCertificateResponse> findAllByPartOfNameOrDescription(String part);
+
+    List<GiftCertificateResponse> findAllSortedByCreateDateAndName(boolean asc);
 
     GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest);
 

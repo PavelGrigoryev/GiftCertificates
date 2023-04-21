@@ -34,14 +34,19 @@ public class GiftCertificateController {
         return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
-    @GetMapping("/findByTagName/{tagName}")
-    public ResponseEntity<List<GiftCertificateResponse>> findByTagName(@PathVariable String tagName) {
-        return ResponseEntity.ok(giftCertificateService.findByTagName(tagName));
+    @GetMapping("/findAllByTagName/{tagName}")
+    public ResponseEntity<List<GiftCertificateResponse>> findAllByTagName(@PathVariable String tagName) {
+        return ResponseEntity.ok(giftCertificateService.findAllByTagName(tagName));
     }
 
-    @GetMapping("/findByPartOfNameOrDescription/{part}")
-    public ResponseEntity<List<GiftCertificateResponse>> findByPartOfNameOrDescription(@PathVariable String part) {
-        return ResponseEntity.ok(giftCertificateService.findByPartOfNameOrDescription(part));
+    @GetMapping("/findAllByPartOfNameOrDescription/{part}")
+    public ResponseEntity<List<GiftCertificateResponse>> findAllByPartOfNameOrDescription(@PathVariable String part) {
+        return ResponseEntity.ok(giftCertificateService.findAllByPartOfNameOrDescription(part));
+    }
+
+    @GetMapping("/findAllSortedByCreateDateAndName/{asc}")
+    public ResponseEntity<List<GiftCertificateResponse>> findAllSortedByCreateDateAndName(@PathVariable boolean asc) {
+        return ResponseEntity.ok(giftCertificateService.findAllSortedByCreateDateAndName(asc));
     }
 
     @PostMapping

@@ -11,9 +11,11 @@ public interface GiftCertificateDao {
 
     Optional<GiftCertificate> findById(Long id);
 
-    List<GiftCertificate> findByTagName(String tagName);
+    List<GiftCertificate> findAllByTagName(String tagName);
 
-    List<GiftCertificate> findByPartOfNameOrDescription(String part);
+    List<GiftCertificate> findAllByPartOfNameOrDescription(String part);
+
+    List<GiftCertificate> findAllSortedByCreateDateAndName(boolean asc);
 
     GiftCertificate save(GiftCertificate giftCertificate);
 
