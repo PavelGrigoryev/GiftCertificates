@@ -1,8 +1,5 @@
 package ru.clevertec.ecl.giftcertificates.dao.impl;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,11 +19,7 @@ public class TagDaoImpl implements TagDao {
     @Override
     public List<Tag> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
-            Root<Tag> root = criteriaQuery.from(Tag.class);
-            criteriaQuery.select(root);
-            return session.createQuery(criteriaQuery).getResultList();
+           return session.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
         }
     }
 

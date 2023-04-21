@@ -45,6 +45,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    public List<GiftCertificateResponse> findByTagName(String tagName) {
+        List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findByTagName(tagName)
+                .stream()
+                .map(giftCertificateMapper::toResponse)
+                .toList();
+        log.info("findByTagName {} GiftCertificates", giftCertificates.size());
+        return giftCertificates;
+    }
+
+    @Override
     public GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
         giftCertificate.setCreateDate(LocalDateTime.now());

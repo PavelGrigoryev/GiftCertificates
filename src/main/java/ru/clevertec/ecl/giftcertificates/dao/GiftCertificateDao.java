@@ -11,6 +11,8 @@ public interface GiftCertificateDao {
 
     Optional<GiftCertificate> findById(Long id);
 
+    List<GiftCertificate> findByTagName(String tagName);
+
     GiftCertificate save(GiftCertificate giftCertificate);
 
     GiftCertificate update(GiftCertificate giftCertificate);

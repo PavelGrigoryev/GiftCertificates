@@ -6,6 +6,10 @@ Accept: application/json
 GET http://localhost:8080/giftCertificates/1
 Accept: application/json
 
+###findByTagName
+GET http://localhost:8080/giftCertificates/findByTagName/Coca-cola
+Accept: application/json
+
 ###save
 POST http://localhost:8080/giftCertificates
 Content-Type: application/json

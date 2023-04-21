@@ -1,8 +1,5 @@
 package ru.clevertec.ecl.giftcertificates.dao.impl;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,11 +19,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public List<GiftCertificate> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.createQuery(GiftCertificate.class);
-            Root<GiftCertificate> root = criteriaQuery.from(GiftCertificate.class);
-            criteriaQuery.select(root);
-            return session.createQuery(criteriaQuery).getResultList();
+            return session.createQuery("SELECT gc FROM GiftCertificate gc", GiftCertificate.class)
+                    .getResultList();
         }
     }
 
@@ -34,6 +28,16 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public Optional<GiftCertificate> findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.get(GiftCertificate.class, id));
+        }
+    }
+
+    @Override
+    public List<GiftCertificate> findByTagName(String tagName) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("SELECT gc FROM GiftCertificate gc JOIN gc.tags t WHERE t.name = :tagName",
+                            GiftCertificate.class)
+                    .setParameter("tagName", tagName)
+                    .getResultList();
         }
     }
 
@@ -49,12 +53,12 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
-       try (Session session = sessionFactory.openSession()) {
-           session.beginTransaction();
-           GiftCertificate merged = session.merge(giftCertificate);
-           session.getTransaction().commit();
-           return merged;
-       }
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            GiftCertificate merged = session.merge(giftCertificate);
+            session.getTransaction().commit();
+            return merged;
+        }
     }
 
     @Override

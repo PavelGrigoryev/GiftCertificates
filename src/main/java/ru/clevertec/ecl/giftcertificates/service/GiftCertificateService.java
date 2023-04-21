@@ -11,6 +11,8 @@ public interface GiftCertificateService {
 
     GiftCertificateResponse findById(Long id);
 
+    List<GiftCertificateResponse> findByTagName(String tagName);
+
     GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest);
 
     GiftCertificateResponse update(GiftCertificateRequest giftCertificateRequest);
