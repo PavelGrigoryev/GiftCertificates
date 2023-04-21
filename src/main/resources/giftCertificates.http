@@ -15,7 +15,7 @@ GET http://localhost:8080/giftCertificates/findAllByPartOfNameOrDescription/Litt
 Accept: application/json
 
 ###findAllSortedByCreateDateAndName
-GET http://localhost:8080/giftCertificates/findAllSortedByCreateDateAndName/false
+GET http://localhost:8080/giftCertificates/findAllSortedByCreateDateAndName/asc
 Accept: application/json
 
 ###save

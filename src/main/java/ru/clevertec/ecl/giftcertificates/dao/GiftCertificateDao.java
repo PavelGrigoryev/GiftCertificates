@@ -15,7 +15,7 @@ public interface GiftCertificateDao {
 
     List<GiftCertificate> findAllByPartOfNameOrDescription(String part);
 
-    List<GiftCertificate> findAllSortedByCreateDateAndName(boolean asc);
+    List<GiftCertificate> findAllSortedByCreateDateAndName(String asc);
 
     GiftCertificate save(GiftCertificate giftCertificate);
 

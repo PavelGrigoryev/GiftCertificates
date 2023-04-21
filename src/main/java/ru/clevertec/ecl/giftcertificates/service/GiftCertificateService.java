@@ -15,7 +15,7 @@ public interface GiftCertificateService {
 
     List<GiftCertificateResponse> findAllByPartOfNameOrDescription(String part);
 
-    List<GiftCertificateResponse> findAllSortedByCreateDateAndName(boolean asc);
+    List<GiftCertificateResponse> findAllSortedByCreateDateAndName(String asc);
 
     GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest);
 

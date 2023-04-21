@@ -45,7 +45,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/findAllSortedByCreateDateAndName/{asc}")
-    public ResponseEntity<List<GiftCertificateResponse>> findAllSortedByCreateDateAndName(@PathVariable boolean asc) {
+    public ResponseEntity<List<GiftCertificateResponse>> findAllSortedByCreateDateAndName(@PathVariable String asc) {
         return ResponseEntity.ok(giftCertificateService.findAllSortedByCreateDateAndName(asc));
     }
 

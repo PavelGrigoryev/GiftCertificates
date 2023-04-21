@@ -65,7 +65,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateResponse> findAllSortedByCreateDateAndName(boolean asc) {
+    public List<GiftCertificateResponse> findAllSortedByCreateDateAndName(String asc) {
         List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findAllSortedByCreateDateAndName(asc)
                 .stream()
                 .map(giftCertificateMapper::toResponse)

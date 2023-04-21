@@ -52,10 +52,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public List<GiftCertificate> findAllSortedByCreateDateAndName(boolean asc) {
+    public List<GiftCertificate> findAllSortedByCreateDateAndName(String asc) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM GiftCertificate ORDER BY createDate " + (asc ? "ASC" : "DESC")
-                                       + ", name " + (asc ? "ASC" : "DESC"), GiftCertificate.class).getResultList();
+            return session.createQuery("FROM GiftCertificate ORDER BY createDate "
+                                       + ("ASC".equalsIgnoreCase(asc) ? "ASC" : "DESC") + ", name "
+                                       + ("ASC".equalsIgnoreCase(asc) ? "ASC" : "DESC"), GiftCertificate.class).getResultList();
         }
     }
 
