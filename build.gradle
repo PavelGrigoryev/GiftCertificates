@@ -17,7 +17,7 @@ targetCompatibility = '17'
 dependencies {
     implementation 'org.springframework:spring-webmvc:6.0.8'
     implementation 'org.springframework:spring-orm:6.0.8'
-    compileOnly 'jakarta.servlet:jakarta.servlet-api:5.0.0'
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
     implementation 'org.hibernate:hibernate-core:6.2.1.Final'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'

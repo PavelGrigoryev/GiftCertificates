@@ -3,7 +3,7 @@ GET http://localhost:8080/tags
 Accept: application/json
 
 ###findById
-GET http://localhost:8080/tags/6
+GET http://localhost:8080/tags/2
 Accept: application/json
 
 ###save
@@ -24,5 +24,5 @@ Content-Type: application/json
 }
 
 ###delete
-DELETE http://localhost:8080/tags/11
+DELETE http://localhost:8080/tags/6
 Content-Type: application/json

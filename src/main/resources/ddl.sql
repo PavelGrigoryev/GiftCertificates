@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS tag
     name VARCHAR(30) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS gift_certificates_tag
+CREATE TABLE IF NOT EXISTS gift_certificate_tag
 (
     gift_certificate_id BIGINT NOT NULL REFERENCES gift_certificate (id),
     tag_id              BIGINT NOT NULL REFERENCES tag (id),

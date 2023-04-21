@@ -14,7 +14,15 @@ Content-Type: application/json
   "name": "Gift",
   "description": "Very Big",
   "price": 10,
-  "duration": 3
+  "duration": 3,
+  "tags": [
+    {
+      "name": "Coca-cola"
+    },
+    {
+      "name": "Sprite"
+    }
+  ]
 }
 
 ###update
@@ -22,7 +30,7 @@ PUT http://localhost:8080/giftCertificates
 Content-Type: application/json
 
 {
-  "id": 3,
+  "id": 1,
   "name": "Salsa",
   "description": "Little",
   "price": 10,
@@ -30,5 +38,5 @@ Content-Type: application/json
 }
 
 ###delete
-DELETE http://localhost:8080/giftCertificates/9
+DELETE http://localhost:8080/giftCertificates/2
 Content-Type: application/json
