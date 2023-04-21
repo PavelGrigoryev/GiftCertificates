@@ -13,6 +13,8 @@ public interface GiftCertificateService {
 
     List<GiftCertificateResponse> findByTagName(String tagName);
 
+    List<GiftCertificateResponse> findByPartOfNameOrDescription(String part);
+
     GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest);
 
     GiftCertificateResponse update(GiftCertificateRequest giftCertificateRequest);

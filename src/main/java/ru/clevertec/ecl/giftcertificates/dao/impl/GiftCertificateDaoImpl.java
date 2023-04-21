@@ -42,6 +42,16 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
+    public List<GiftCertificate> findByPartOfNameOrDescription(String part) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM GiftCertificate WHERE name LIKE :part OR description LIKE :part",
+                            GiftCertificate.class)
+                    .setParameter("part", "%" + part + "%")
+                    .getResultList();
+        }
+    }
+
+    @Override
     public GiftCertificate save(GiftCertificate giftCertificate) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();

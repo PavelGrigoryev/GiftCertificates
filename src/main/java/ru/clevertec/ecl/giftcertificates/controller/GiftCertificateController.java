@@ -39,6 +39,11 @@ public class GiftCertificateController {
         return ResponseEntity.ok(giftCertificateService.findByTagName(tagName));
     }
 
+    @GetMapping("/findByPartOfNameOrDescription/{part}")
+    public ResponseEntity<List<GiftCertificateResponse>> findByPartOfNameOrDescription(@PathVariable String part) {
+        return ResponseEntity.ok(giftCertificateService.findByPartOfNameOrDescription(part));
+    }
+
     @PostMapping
     public ResponseEntity<GiftCertificateResponse> save(@RequestBody GiftCertificateRequest giftCertificateRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(giftCertificateService.save(giftCertificateRequest));

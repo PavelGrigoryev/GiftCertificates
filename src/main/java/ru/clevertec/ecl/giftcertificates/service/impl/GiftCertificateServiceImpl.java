@@ -31,7 +31,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .sorted(Comparator.comparing(GiftCertificate::getId))
                 .map(giftCertificateMapper::toResponse)
                 .toList();
-        log.info("findAll {} GiftCertificates", giftCertificates.size());
+        log.info("findAll {} GiftCertificates size", giftCertificates.size());
         return giftCertificates;
     }
 
@@ -50,7 +50,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .stream()
                 .map(giftCertificateMapper::toResponse)
                 .toList();
-        log.info("findByTagName {} GiftCertificates", giftCertificates.size());
+        log.info("findByTagName {} GiftCertificates size", giftCertificates.size());
+        return giftCertificates;
+    }
+
+    @Override
+    public List<GiftCertificateResponse> findByPartOfNameOrDescription(String part) {
+        List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findByPartOfNameOrDescription(part)
+                .stream()
+                .map(giftCertificateMapper::toResponse)
+                .toList();
+        log.info("findByPartOfNameOrDescription {} GiftCertificates size", giftCertificates.size());
         return giftCertificates;
     }
 

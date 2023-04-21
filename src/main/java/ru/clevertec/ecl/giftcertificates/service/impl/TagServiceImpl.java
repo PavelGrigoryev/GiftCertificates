@@ -29,7 +29,7 @@ public class TagServiceImpl implements TagService {
                 .sorted(Comparator.comparing(Tag::getId))
                 .map(tagMapper::toDto)
                 .toList();
-        log.info("findAll {} Tags", tags.size());
+        log.info("findAll {} Tags size", tags.size());
         return tags;
     }
 

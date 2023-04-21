@@ -13,6 +13,8 @@ public interface GiftCertificateDao {
 
     List<GiftCertificate> findByTagName(String tagName);
 
+    List<GiftCertificate> findByPartOfNameOrDescription(String part);
+
     GiftCertificate save(GiftCertificate giftCertificate);
 
     GiftCertificate update(GiftCertificate giftCertificate);
