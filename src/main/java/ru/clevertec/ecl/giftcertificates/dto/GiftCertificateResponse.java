@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GiftCertificateDto {
+public class GiftCertificateResponse {
 
     private Long id;
     private String name;

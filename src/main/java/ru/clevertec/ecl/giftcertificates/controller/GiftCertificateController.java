@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateDto;
+import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
+import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 
 import java.util.List;
@@ -24,23 +25,23 @@ public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
 
     @GetMapping
-    public ResponseEntity<List<GiftCertificateDto>> findAll() {
+    public ResponseEntity<List<GiftCertificateResponse>> findAll() {
         return ResponseEntity.ok(giftCertificateService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GiftCertificateDto> findById(@PathVariable Long id) {
+    public ResponseEntity<GiftCertificateResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<GiftCertificateDto> save(@RequestBody GiftCertificateDto giftCertificate) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(giftCertificateService.save(giftCertificate));
+    public ResponseEntity<GiftCertificateResponse> save(@RequestBody GiftCertificateRequest giftCertificateRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(giftCertificateService.save(giftCertificateRequest));
     }
 
     @PutMapping
-    public ResponseEntity<GiftCertificateDto> update(@RequestBody GiftCertificateDto giftCertificateDto) {
-        return ResponseEntity.ok(giftCertificateService.update(giftCertificateDto));
+    public ResponseEntity<GiftCertificateResponse> update(@RequestBody GiftCertificateRequest giftCertificateRequest) {
+        return ResponseEntity.ok(giftCertificateService.update(giftCertificateRequest));
     }
 
     @DeleteMapping("/{id}")

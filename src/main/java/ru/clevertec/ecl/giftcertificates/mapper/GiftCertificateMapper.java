@@ -1,14 +1,18 @@
 package ru.clevertec.ecl.giftcertificates.mapper;
 
 import org.mapstruct.Mapper;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateDto;
+import org.mapstruct.Mapping;
+import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
+import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 
 @Mapper
 public interface GiftCertificateMapper {
 
-    GiftCertificateDto toDto(GiftCertificate giftCertificate);
+    GiftCertificateResponse toResponse(GiftCertificate giftCertificate);
 
-    GiftCertificate fromDto(GiftCertificateDto giftCertificateDto);
+    @Mapping(target = "createDate", ignore = true)
+    @Mapping(target = "lastUpdateDate", ignore = true)
+    GiftCertificate fromRequest(GiftCertificateRequest giftCertificateRequest);
 
 }
