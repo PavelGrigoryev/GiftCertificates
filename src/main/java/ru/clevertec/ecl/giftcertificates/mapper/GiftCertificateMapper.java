@@ -15,4 +15,6 @@ public interface GiftCertificateMapper {
     @Mapping(target = "lastUpdateDate", ignore = true)
     GiftCertificate fromRequest(GiftCertificateRequest giftCertificateRequest);
 
+    GiftCertificateRequest toRequest(GiftCertificate giftCertificate);
+
 }

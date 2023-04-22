@@ -114,8 +114,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificateResponse update(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
         GiftCertificate byId = giftCertificateDao.findById(giftCertificate.getId())
-                .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID "
-                                                                      + giftCertificate.getId() + " does not exist"));
+                .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID " + giftCertificate.getId() + " does not exist"));
         giftCertificate.setCreateDate(byId.getCreateDate());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
         checkFieldsForNull(giftCertificate, byId);

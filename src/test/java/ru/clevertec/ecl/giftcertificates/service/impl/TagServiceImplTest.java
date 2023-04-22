@@ -42,7 +42,7 @@ class TagServiceImplTest {
     @Mock
     private TagDao tagDao;
     private final TagMapper tagMapper = Mappers.getMapper(TagMapper.class);
-    private static final TagTestBuilder testBuilder = TagTestBuilder.aTag();
+    private static final TagTestBuilder TEST_BUILDER = TagTestBuilder.aTag();
     @Captor
     private ArgumentCaptor<Tag> captor;
 
@@ -57,7 +57,7 @@ class TagServiceImplTest {
         @Test
         @DisplayName("test findAll should return List of size 1")
         void testFindAllShouldReturnListOfSizeOne() {
-            Tag mockedTag = testBuilder.build();
+            Tag mockedTag = TEST_BUILDER.build();
             int expectedSize = 1;
 
             doReturn(List.of(mockedTag))
@@ -71,9 +71,9 @@ class TagServiceImplTest {
         @Test
         @DisplayName("test findAll should return sorted by id List of TagDto")
         void testFindAllShouldReturnSortedByIdListOfTagDto() {
-            Tag firstMock = testBuilder.build();
-            Tag secondMock = testBuilder.withId(2L).build();
-            Tag thirdMock = testBuilder.withId(3L).build();
+            Tag firstMock = TEST_BUILDER.build();
+            Tag secondMock = TEST_BUILDER.withId(2L).build();
+            Tag thirdMock = TEST_BUILDER.withId(3L).build();
             List<Tag> mockedTags = List.of(secondMock, thirdMock, firstMock);
             List<TagDto> expectedValues = Stream.of(firstMock, secondMock, thirdMock)
                     .map(tagMapper::toDto)
@@ -132,7 +132,7 @@ class TagServiceImplTest {
         @Test
         @DisplayName("test testFindById should return expected TagDto")
         void testFindByIdShouldReturnExpectedTagDto() {
-            Tag mockedTag = testBuilder.build();
+            Tag mockedTag = TEST_BUILDER.build();
             long id = mockedTag.getId();
             TagDto expectedValue = tagMapper.toDto(mockedTag);
 
@@ -175,7 +175,7 @@ class TagServiceImplTest {
         @Test
         @DisplayName("test update should return updated TagDto")
         void testUpdateShouldReturnUpdatedTagDto() {
-           Tag mockedTag = testBuilder.build();
+           Tag mockedTag = TEST_BUILDER.build();
            TagDto expectedValue = tagMapper.toDto(mockedTag);
            long id = mockedTag.getId();
 
@@ -198,7 +198,7 @@ class TagServiceImplTest {
         @Test
         @DisplayName("test update should return TagDto without update")
         void testUpdateShouldReturnTagDtoWithoutUpdate() {
-            Tag mockedTag = testBuilder.build();
+            Tag mockedTag = TEST_BUILDER.build();
             TagDto expectedValue = tagMapper.toDto(mockedTag);
             long id = mockedTag.getId();
 
@@ -219,7 +219,7 @@ class TagServiceImplTest {
         @Test
         @DisplayName("test delete should invoke method 1 time")
         void testDeleteShouldInvokeOneTime() {
-            Tag mockedTag = testBuilder.build();
+            Tag mockedTag = TEST_BUILDER.build();
             long id = mockedTag.getId();
 
             doReturn(Optional.of(mockedTag))
@@ -260,11 +260,11 @@ class TagServiceImplTest {
 
     private static Stream<Arguments> getArgumentsForSaveTest() {
         return Stream.of(
-                Arguments.of(testBuilder.build()),
-                Arguments.of(testBuilder.withId(2L)
+                Arguments.of(TEST_BUILDER.build()),
+                Arguments.of(TEST_BUILDER.withId(2L)
                         .withName("Scorpion")
                         .build()),
-                Arguments.of(testBuilder.withId(3L)
+                Arguments.of(TEST_BUILDER.withId(3L)
                         .withName("Sub-zero")
                         .build()));
     }

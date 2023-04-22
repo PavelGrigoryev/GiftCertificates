@@ -24,12 +24,10 @@ public class GiftCertificateResponse {
     private BigDecimal price;
     private Integer duration;
     @JsonProperty("create_date")
-    @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
     private LocalDateTime createDate;
     @JsonProperty("last_update_date")
-    @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
     private LocalDateTime lastUpdateDate;
     private List<TagDto> tags = new ArrayList<>();
 
