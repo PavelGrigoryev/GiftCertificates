@@ -3,8 +3,10 @@ package ru.clevertec.ecl.giftcertificates.dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.ecl.giftcertificates.dao.TagDao;
+import ru.clevertec.ecl.giftcertificates.exception.CannotDeleteTagException;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class TagDaoImpl implements TagDao {
     @Override
     public List<Tag> findAll() {
         try (Session session = sessionFactory.openSession()) {
-           return session.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
+            return session.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
         }
     }
 
@@ -53,14 +55,19 @@ public class TagDaoImpl implements TagDao {
     @Override
     public Optional<Tag> delete(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Tag> tag = findById(id);
-            if (tag.isEmpty()) {
-                return Optional.empty();
+            try {
+                session.beginTransaction();
+                Optional<Tag> tag = findById(id);
+                if (tag.isEmpty()) {
+                    return Optional.empty();
+                }
+                session.remove(tag.get());
+                session.getTransaction().commit();
+                return tag;
+            } catch (ConstraintViolationException exception) {
+                throw new CannotDeleteTagException("You cannot delete the Tag, first you need to delete" +
+                                                   " the GiftCertificate that contains this Tag");
             }
-            session.remove(tag.get());
-            session.getTransaction().commit();
-            return tag;
         }
     }
 

@@ -41,12 +41,15 @@ Content-Type: application/json
   "duration": 5,
   "tags": [
     {
+      "id": 1,
       "name": "Pepsi"
     },
     {
+      "id": 2,
       "name": "Mirinda"
     },
     {
+      "id": 3,
       "name": "7-Up"
     }
   ]
