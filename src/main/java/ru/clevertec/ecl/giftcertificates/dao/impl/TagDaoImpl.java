@@ -25,7 +25,9 @@ public class TagDaoImpl implements TagDao {
     private final SessionFactory sessionFactory;
 
     /**
-     * @return a list of all {@link Tag} entities from database.
+     * Finds all {@link Tag} entities from database.
+     *
+     * @return a list of all Tag entities.
      */
     @Override
     public List<Tag> findAll() {
@@ -35,7 +37,9 @@ public class TagDaoImpl implements TagDao {
     }
 
     /**
-     * @param id the ID of the {@link Tag} entity.
+     * Finds one {@link Tag} entity by ID from database.
+     *
+     * @param id the ID of the Tag entity.
      * @return an {@link Optional} containing the Tag entity with the specified ID, or an empty Optional if no such
      * entity exists in the database.
      */
@@ -47,7 +51,9 @@ public class TagDaoImpl implements TagDao {
     }
 
     /**
-     * @param tag the {@link Tag} entity to save in database.
+     * Saves one {@link Tag} entity in database.
+     *
+     * @param tag the Tag entity to save.
      * @return the saved Tag entity.
      */
     @Override
@@ -61,7 +67,9 @@ public class TagDaoImpl implements TagDao {
     }
 
     /**
-     * @param tag the {@link Tag} entity to update in database.
+     * Updates one {@link Tag} entity in database if it exists by ID, if not - saves new.
+     *
+     * @param tag the Tag entity to update.
      * @return the updated Tag entity.
      */
     @Override
@@ -75,7 +83,9 @@ public class TagDaoImpl implements TagDao {
     }
 
     /**
-     * @param id the ID of the {@link Tag} entity to delete.
+     * Deletes one {@link Tag} entity by ID in database.
+     *
+     * @param id the ID of the Tag entity to delete.
      * @return an {@link Optional} containing the deleted Tag entity, or an empty Optional if no such entity
      * exists in the database.
      * @throws CannotDeleteTagException if the Tag entity is associated with any {@link GiftCertificate} entities.

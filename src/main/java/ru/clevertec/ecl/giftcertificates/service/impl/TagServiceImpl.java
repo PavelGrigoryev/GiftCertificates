@@ -14,6 +14,12 @@ import ru.clevertec.ecl.giftcertificates.service.TagService;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * The TagServiceImpl class implements TagService interface and provides the implementation for CRUD operations on the
+ * {@link Tag} entity and also adds new functionality, such as convert to dto {@link TagDto} from entity and from
+ * dto to entity. It uses a {@link TagDao} to interact with the database and {@link TagMapper} to map entity to dto and
+ * from dto to entity.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -22,6 +28,11 @@ public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
     private final TagMapper tagMapper = Mappers.getMapper(TagMapper.class);
 
+    /**
+     * Finds all {@link TagDto}.
+     *
+     * @return a sorted by id and mapped from entity to dto list of all TagDto.
+     */
     @Override
     public List<TagDto> findAll() {
         List<TagDto> tags = tagDao.findAll()
@@ -33,6 +44,13 @@ public class TagServiceImpl implements TagService {
         return tags;
     }
 
+    /**
+     * Finds one {@link TagDto} by ID.
+     *
+     * @param id the ID of the {@link Tag}.
+     * @return TagDto with the specified ID and mapped from Tag entity.
+     * @throws NoSuchTagException if Tag is not exists by finding it by ID.
+     */
     @Override
     public TagDto findById(Long id) {
         TagDto tagDto = tagDao.findById(id)
@@ -42,6 +60,12 @@ public class TagServiceImpl implements TagService {
         return tagDto;
     }
 
+    /**
+     * Saves one {@link Tag}.
+     *
+     * @param tagDto the {@link TagDto} which will be mapped to Tag and saved in database by dao.
+     * @return the saved TagDto which was mapped from Tag entity.
+     */
     @Override
     public TagDto save(TagDto tagDto) {
         Tag tag = tagMapper.fromDto(tagDto);
@@ -51,11 +75,18 @@ public class TagServiceImpl implements TagService {
         return savedDto;
     }
 
+    /**
+     * Updates one {@link Tag}.
+     *
+     * @param tagDto the {@link TagDto} which will be mapped to Tag and updated in database by dao.
+     * @return the updated TagDto which was mapped from Tag entity, if name is same - returns same TagDto without update.
+     * @throws NoSuchTagException if Tag is not exists by finding it by ID.
+     */
     @Override
     public TagDto update(TagDto tagDto) {
         Tag tag = tagMapper.fromDto(tagDto);
         Tag byId = tagDao.findById(tag.getId()).orElseThrow(() -> new NoSuchTagException("Tag with ID "
-                                                                              + tag.getId() + " does not exist"));
+                                                                                         + tag.getId() + " does not exist"));
         if (tag.getName().equals(byId.getName())) {
             log.info("no update {}", tagDto);
             return tagDto;
@@ -66,6 +97,12 @@ public class TagServiceImpl implements TagService {
         return updatedDto;
     }
 
+    /**
+     * Deletes one {@link Tag} by ID.
+     *
+     * @param id the ID of the Tag.
+     * @throws NoSuchTagException if Tag is not exists by finding it by ID.
+     */
     @Override
     public void delete(Long id) {
         Tag tag = tagDao.delete(id)

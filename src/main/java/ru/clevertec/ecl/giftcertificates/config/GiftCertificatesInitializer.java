@@ -20,7 +20,7 @@ public class GiftCertificatesInitializer implements WebApplicationInitializer {
      * the ServletContext to handle incoming requests.The servlet is named "dispatcher" and is mapped to the root
      * URL ("/").
      *
-     * @param servletContext the ServletContext of the web application
+     * @param servletContext the ServletContext of the web application.
      */
     @Override
     public void onStartup(ServletContext servletContext) {

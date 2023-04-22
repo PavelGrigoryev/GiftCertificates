@@ -15,8 +15,8 @@ import java.util.Optional;
 
 /**
  * The GiftCertificateDaoImpl class implements the GiftCertificateDao interface and provides the implementation for
- * CRUD operations on the {@link GiftCertificate} entity using Hibernate. It uses a {@link SessionFactory} object to interact
- * with the database and manage transactions.
+ * CRUD operations on the {@link GiftCertificate} entity using Hibernate. It uses a {@link SessionFactory} object to
+ * interact with the database and manage transactions.
  */
 @Slf4j
 @Repository
@@ -26,7 +26,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private final SessionFactory sessionFactory;
 
     /**
-     * @return a list of all {@link GiftCertificate} entities from database.
+     * Finds all {@link GiftCertificate} entities from database.
+     *
+     * @return a list of all GiftCertificate entities.
      */
     @Override
     public List<GiftCertificate> findAll() {
@@ -37,7 +39,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     /**
-     * @param id the ID of the {@link GiftCertificate} entity.
+     * Finds one {@link GiftCertificate} entity by ID from database.
+     *
+     * @param id the ID of the GiftCertificate entity.
      * @return an {@link Optional} containing the GiftCertificate entity with the specified ID, or an empty Optional if
      * no such entity exists in the database.
      */
@@ -49,16 +53,16 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     /**
-     * The method finds all {@link GiftCertificate}s by the specified parameters (All params are optional and can be
+     * Finds all {@link GiftCertificate} by the specified parameters (All params are optional and can be
      * used in conjunction). It can find by tagName(if null finds all), by  part of name or description
      * (if null exclude this query), by date or name(if null exclude this query) and can be ordered ascending
      * or descending(if null ascending by default).
      *
-     * @param tagName the name of {@link Tag}
-     * @param part the part of name or description of GiftCertificate
-     * @param sortBy the sort by date or by name of GiftCertificate
-     * @param order the order for sorting ascending(ASC) or descending(DESC)
-     * @return a sorted by one or many parameters list of GiftCertificate entities from database.
+     * @param tagName the name of {@link Tag}.
+     * @param part    the part of name or description of GiftCertificate.
+     * @param sortBy  the sort by date or by name of GiftCertificate.
+     * @param order   the order for sorting ascending(ASC) or descending(DESC).
+     * @return a filtered and sorted by one or many parameters list of GiftCertificate entities from database.
      */
     @Override
     public List<GiftCertificate> findAllWithTags(String tagName, String part, String sortBy, String order) {
@@ -88,7 +92,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     /**
-     * @param giftCertificate the {@link GiftCertificate} entity to save in database.
+     * Saves one {@link GiftCertificate} entity in database.
+     *
+     * @param giftCertificate the GiftCertificate entity to save.
      * @return the saved GiftCertificate entity.
      */
     @Override
@@ -102,7 +108,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     /**
-     * @param giftCertificate the {@link GiftCertificate} entity to update in database.
+     * Updates one {@link GiftCertificate} entity in database if it exists by ID, if not - saves new.
+     *
+     * @param giftCertificate the GiftCertificate entity to update in database.
      * @return the updated GiftCertificate entity.
      */
     @Override
@@ -116,7 +124,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     /**
-     * @param id the ID of the {@link GiftCertificate} entity to delete.
+     * Deletes one {@link GiftCertificate} entity by ID in database.
+     *
+     * @param id the ID of the GiftCertificate entity to delete.
      * @return an {@link Optional} containing the deleted GiftCertificate entity, or an empty Optional if no such entity
      * exists in the database.
      */

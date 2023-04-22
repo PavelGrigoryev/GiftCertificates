@@ -21,7 +21,7 @@ import java.util.Properties;
  * The {@link PropertySource} annotation is used to indicate the resource locations of the properties files to be loaded.
  * The {@link ComponentScan} annotation is used to specify the base package for component scanning, which is where
  * Spring will look for annotated components such as controllers, services, and repositories.
- * The {@link EnableTransactionManagement} annotation enables Spring's annotation-driven transaction management capability
+ * The {@link EnableTransactionManagement} annotation enables Spring's annotation-driven transaction management capability.
  */
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -38,7 +38,7 @@ public class DatabaseConfig {
      * {@link Environment}. Then creates a new {@link HikariConfig} class and sets these properties
      * on it before passing it to the constructor of a new {@link HikariDataSource} object.
      *
-     * @return the new {@link HikariDataSource} object is returned to be used as a data source for the Hibernate ORM
+     * @return the new {@link HikariDataSource} object is returned to be used as a data source for the Hibernate ORM.
      */
     @Bean
     public HikariDataSource hikariDataSource() {
@@ -82,7 +82,7 @@ public class DatabaseConfig {
     }
 
     /**
-     * Create a new instance of the {@link Properties} class. The method sets necessary properties for Hibernate
+     * Create a new instance of the {@link Properties} class. The method sets necessary properties for Hibernate.
      *
      * @return a {@link Properties} object containing the Hibernate properties.
      */

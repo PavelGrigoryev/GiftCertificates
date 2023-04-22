@@ -32,7 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      * instance of the {@link MappingJackson2HttpMessageConverter} class and sets the ObjectMapper instance as its object
      * mapper. Finally, it adds the message converter to the list of converters.
      *
-     * @param converters List of {@link HttpMessageConverter}
+     * @param converters List of {@link HttpMessageConverter}.
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
