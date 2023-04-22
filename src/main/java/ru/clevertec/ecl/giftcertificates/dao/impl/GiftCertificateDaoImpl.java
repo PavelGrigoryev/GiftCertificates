@@ -1,8 +1,10 @@
 package ru.clevertec.ecl.giftcertificates.dao.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.ecl.giftcertificates.dao.GiftCertificateDao;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
@@ -10,6 +12,7 @@ import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
@@ -32,31 +35,29 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public List<GiftCertificate> findAllByTagName(String tagName) {
+    public List<GiftCertificate> findAllWithTags(String tagName, String part, String sortBy, String order) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("SELECT gc FROM GiftCertificate gc JOIN gc.tags t WHERE t.name = :tagName",
-                            GiftCertificate.class)
-                    .setParameter("tagName", tagName)
-                    .getResultList();
-        }
-    }
-
-    @Override
-    public List<GiftCertificate> findAllByPartOfNameOrDescription(String part) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM GiftCertificate WHERE name LIKE :part OR description LIKE :part",
-                            GiftCertificate.class)
-                    .setParameter("part", "%" + part + "%")
-                    .getResultList();
-        }
-    }
-
-    @Override
-    public List<GiftCertificate> findAllSortedByCreateDateAndName(String asc) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM GiftCertificate ORDER BY createDate "
-                                       + ("ASC".equalsIgnoreCase(asc) ? "ASC" : "DESC") + ", name "
-                                       + ("ASC".equalsIgnoreCase(asc) ? "ASC" : "DESC"), GiftCertificate.class).getResultList();
+            StringBuilder sqlBuilder = new StringBuilder("SELECT gc FROM GiftCertificate gc ");
+            if (tagName != null) {
+                sqlBuilder.append("JOIN gc.tags t WHERE t.name = :tagName ");
+            }
+            if (part != null) {
+                sqlBuilder.append(tagName == null ? "WHERE " : "AND ");
+                sqlBuilder.append("(gc.name LIKE :part OR gc.description LIKE :part) ");
+            }
+            if (sortBy != null || order != null) {
+                sqlBuilder.append("date".equalsIgnoreCase(sortBy) ? "ORDER BY gc.createDate " : "ORDER BY gc.name ")
+                        .append("DESC".equalsIgnoreCase(order) ? "DESC" : "ASC");
+            }
+            Query<GiftCertificate> query = session.createQuery(sqlBuilder.toString(), GiftCertificate.class);
+            if (tagName != null) {
+                query.setParameter("tagName", tagName);
+            }
+            if (part != null) {
+                query.setParameter("part", "%" + part + "%");
+            }
+            log.info("findAllWithTags HQL = " + sqlBuilder);
+            return query.getResultList();
         }
     }
 

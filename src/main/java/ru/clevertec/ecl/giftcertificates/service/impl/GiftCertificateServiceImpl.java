@@ -45,32 +45,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateResponse> findAllByTagName(String tagName) {
-        List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findAllByTagName(tagName)
+    public List<GiftCertificateResponse> findAllWithTags(String tagName, String part, String sortBy, String order) {
+        List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findAllWithTags(tagName, part, sortBy, order)
                 .stream()
                 .map(giftCertificateMapper::toResponse)
                 .toList();
-        log.info("findAllByTagName {} GiftCertificates size", giftCertificates.size());
-        return giftCertificates;
-    }
-
-    @Override
-    public List<GiftCertificateResponse> findAllByPartOfNameOrDescription(String part) {
-        List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findAllByPartOfNameOrDescription(part)
-                .stream()
-                .map(giftCertificateMapper::toResponse)
-                .toList();
-        log.info("findAllByPartOfNameOrDescription {} GiftCertificates size", giftCertificates.size());
-        return giftCertificates;
-    }
-
-    @Override
-    public List<GiftCertificateResponse> findAllSortedByCreateDateAndName(String asc) {
-        List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findAllSortedByCreateDateAndName(asc)
-                .stream()
-                .map(giftCertificateMapper::toResponse)
-                .toList();
-        log.info("findAllSortedByCreateDateAndName {} GiftCertificates size", giftCertificates.size());
+        log.info("findAllWithTags {} GiftCertificates size", giftCertificates.size());
         return giftCertificates;
     }
 

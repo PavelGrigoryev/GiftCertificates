@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
@@ -34,19 +35,12 @@ public class GiftCertificateController {
         return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
-    @GetMapping("/findAllByTagName/{tagName}")
-    public ResponseEntity<List<GiftCertificateResponse>> findAllByTagName(@PathVariable String tagName) {
-        return ResponseEntity.ok(giftCertificateService.findAllByTagName(tagName));
-    }
-
-    @GetMapping("/findAllByPartOfNameOrDescription/{part}")
-    public ResponseEntity<List<GiftCertificateResponse>> findAllByPartOfNameOrDescription(@PathVariable String part) {
-        return ResponseEntity.ok(giftCertificateService.findAllByPartOfNameOrDescription(part));
-    }
-
-    @GetMapping("/findAllSortedByCreateDateAndName/{asc}")
-    public ResponseEntity<List<GiftCertificateResponse>> findAllSortedByCreateDateAndName(@PathVariable String asc) {
-        return ResponseEntity.ok(giftCertificateService.findAllSortedByCreateDateAndName(asc));
+    @GetMapping("/findAllWithTags")
+    public ResponseEntity<List<GiftCertificateResponse>> findAllWithTags(@RequestParam(required = false) String tagName,
+                                                                         @RequestParam(required = false) String part,
+                                                                         @RequestParam(required = false) String sortBy,
+                                                                         @RequestParam(required = false) String order) {
+        return ResponseEntity.ok(giftCertificateService.findAllWithTags(tagName, part, sortBy, order));
     }
 
     @PostMapping

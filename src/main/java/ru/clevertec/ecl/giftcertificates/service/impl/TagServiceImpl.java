@@ -54,6 +54,12 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDto update(TagDto tagDto) {
         Tag tag = tagMapper.fromDto(tagDto);
+        Tag byId = tagDao.findById(tag.getId()).orElseThrow(() -> new NoSuchTagException("Tag with ID "
+                                                                              + tag.getId() + " does not exist"));
+        if (tag.getName().equals(byId.getName())) {
+            log.info("no update {}", tagDto);
+            return tagDto;
+        }
         Tag updated = tagDao.update(tag);
         TagDto updatedDto = tagMapper.toDto(updated);
         log.info("update {}", updatedDto);
