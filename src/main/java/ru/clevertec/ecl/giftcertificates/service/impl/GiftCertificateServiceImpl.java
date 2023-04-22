@@ -140,7 +140,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     /**
-     * Checks all fields of {@link GiftCertificate} for null, if they - null sets old fields from GiftCertificate that
+     * Checks all fields of {@link GiftCertificate} for null, if they null - sets old fields from GiftCertificate that
      * was found by ID.
      *
      * @param giftCertificate the GiftCertificate from {@link GiftCertificateRequest}.
