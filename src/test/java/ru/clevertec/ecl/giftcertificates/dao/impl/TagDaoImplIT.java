@@ -60,7 +60,7 @@ class TagDaoImplIT {
 
         @Test
         @DisplayName("test findById should return expected Tag")
-        void testFindByIdShouldReturnExpectedTagDto() {
+        void testFindByIdShouldReturnExpectedTag() {
             Tag expectedValue = TEST_BUILDER.withId(2L).withName("Fanta").build();
 
             Optional<Tag> actualValue = tagDao.findById(expectedValue.getId());
