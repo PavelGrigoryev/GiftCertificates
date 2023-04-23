@@ -130,7 +130,7 @@ class TagServiceImplTest {
         }
 
         @Test
-        @DisplayName("test testFindById should return expected TagDto")
+        @DisplayName("test findById should return expected TagDto")
         void testFindByIdShouldReturnExpectedTagDto() {
             Tag mockedTag = TEST_BUILDER.build();
             long id = mockedTag.getId();

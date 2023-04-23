@@ -55,8 +55,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     /**
      * Finds all {@link GiftCertificate} by the specified parameters (All params are optional and can be
      * used in conjunction). It can find by tagName(if null finds all), by  part of name or description
-     * (if null exclude this query), by date or name(if null exclude this query) and can be ordered ascending
-     * or descending(if null ascending by default).
+     * (if null exclude this query), by date or name(if null exclude this query, if wrong input name default)
+     * and can be ordered ascending or descending(if null or wrong input ascending by default).
      *
      * @param tagName the name of {@link Tag}.
      * @param part    the part of name or description of GiftCertificate.
