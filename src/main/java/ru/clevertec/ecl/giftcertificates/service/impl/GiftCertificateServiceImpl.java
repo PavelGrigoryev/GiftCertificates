@@ -94,8 +94,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
-        giftCertificate.setCreateDate(LocalDateTime.now());
-        giftCertificate.setLastUpdateDate(LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+        giftCertificate.setCreateDate(now);
+        giftCertificate.setLastUpdateDate(now);
         GiftCertificate saved = giftCertificateDao.save(giftCertificate);
         GiftCertificateResponse savedDto = giftCertificateMapper.toResponse(saved);
         log.info("save {}", savedDto);

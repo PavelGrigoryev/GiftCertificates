@@ -3,11 +3,9 @@ package ru.clevertec.ecl.giftcertificates.dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.query.MutationQuery;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.ecl.giftcertificates.dao.TagDao;
-import ru.clevertec.ecl.giftcertificates.exception.CannotDeleteTagException;
-import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 
 import java.util.List;
@@ -88,24 +86,25 @@ public class TagDaoImpl implements TagDao {
      * @param id the ID of the Tag entity to delete.
      * @return an {@link Optional} containing the deleted Tag entity, or an empty Optional if no such entity
      * exists in the database.
-     * @throws CannotDeleteTagException if the Tag entity is associated with any {@link GiftCertificate} entities.
      */
     @Override
     public Optional<Tag> delete(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            try {
-                session.beginTransaction();
-                Optional<Tag> tag = findById(id);
-                if (tag.isEmpty()) {
-                    return Optional.empty();
-                }
-                session.remove(tag.get());
-                session.getTransaction().commit();
-                return tag;
-            } catch (ConstraintViolationException exception) {
-                throw new CannotDeleteTagException("You cannot delete the Tag, first you need to delete" +
-                                                   " the GiftCertificate that contains this Tag");
+            session.beginTransaction();
+            Optional<Tag> tag = findById(id);
+            if (tag.isEmpty()) {
+                return Optional.empty();
             }
+            MutationQuery deleteTagRelation = session
+                    .createNativeMutationQuery("DELETE FROM gift_certificate_tag WHERE tag_id = :id")
+                    .setParameter("id", id);
+            MutationQuery deleteTag = session
+                    .createMutationQuery("DELETE FROM Tag WHERE id = :id")
+                    .setParameter("id", id);
+            deleteTagRelation.executeUpdate();
+            deleteTag.executeUpdate();
+            session.getTransaction().commit();
+            return tag;
         }
     }
 

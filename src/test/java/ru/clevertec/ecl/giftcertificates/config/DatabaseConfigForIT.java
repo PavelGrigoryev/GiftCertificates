@@ -22,9 +22,9 @@ public class DatabaseConfigForIT {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactoryBean() {
+    public LocalSessionFactoryBean sessionFactoryBean(DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setDataSource(dataSource);
         sessionFactory.setPackagesToScan("ru.clevertec.ecl.giftcertificates");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;

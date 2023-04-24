@@ -38,14 +38,18 @@ public class GiftCertificate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String description;
     private BigDecimal price;
     private Integer duration;
+
     @Column(name = "create_date")
     private LocalDateTime createDate;
+
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
+
     @ManyToMany(
             fetch = FetchType.EAGER,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
@@ -56,6 +60,7 @@ public class GiftCertificate {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     @ToString.Exclude
+    @Builder.Default
     private List<Tag> tags = new ArrayList<>();
 
     @Override

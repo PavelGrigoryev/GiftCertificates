@@ -52,16 +52,16 @@ public class DatabaseConfig {
 
     /**
      * Creates a new instance of the {@link LocalSessionFactoryBean} class. The method sets the data source to be
-     * used by the SessionFactory object by calling the {@link #hikariDataSource()} method.
+     * used by the SessionFactory object by calling the {@link HikariDataSource} bean.
      * It also specifies the package where the Hibernate entities are located using the setPackagesToScan() method.
      * Then it sets the Hibernate properties using the {@link #hibernateProperties()} method.
      *
      * @return a LocalSessionFactoryBean object configured with the data source and Hibernate properties.
      */
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
+    public LocalSessionFactoryBean sessionFactory(HikariDataSource hikariDataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(hikariDataSource());
+        sessionFactory.setDataSource(hikariDataSource);
         sessionFactory.setPackagesToScan("ru.clevertec.ecl.giftcertificates");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
@@ -70,14 +70,14 @@ public class DatabaseConfig {
     /**
      * Creates a new instance of the {@link HibernateTransactionManager} class. The method sets
      * the {@link org.hibernate.SessionFactory} object to be used by the transaction manager by calling the getObject()
-     * method on the {@link LocalSessionFactoryBean} returned by the {@link #sessionFactory()} method.
+     * method on the {@link LocalSessionFactoryBean} returned by the LocalSessionFactoryBean.
      *
      * @return a {@link PlatformTransactionManager} object configured with the SessionFactory object.
      */
     @Bean
-    public PlatformTransactionManager hibernateTransactionManager() {
+    public PlatformTransactionManager hibernateTransactionManager(LocalSessionFactoryBean sessionFactory) {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
+        transactionManager.setSessionFactory(sessionFactory.getObject());
         return transactionManager;
     }
 

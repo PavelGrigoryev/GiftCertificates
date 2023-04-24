@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/giftCertificates")
+@RequestMapping("/gift_certificates")
 public class GiftCertificateController {
 
     private final GiftCertificateService giftCertificateService;

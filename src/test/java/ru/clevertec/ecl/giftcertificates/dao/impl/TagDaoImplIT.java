@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.clevertec.ecl.giftcertificates.config.DatabaseConfigForIT;
 import ru.clevertec.ecl.giftcertificates.dao.TagDao;
-import ru.clevertec.ecl.giftcertificates.exception.CannotDeleteTagException;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 import ru.clevertec.ecl.giftcertificates.util.impl.TagTestBuilder;
 
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringJUnitConfig(DatabaseConfigForIT.class)
 class TagDaoImplIT {
@@ -142,24 +140,6 @@ class TagDaoImplIT {
             Optional<Tag> actualValue = tagDao.delete(15L);
 
             assertThat(actualValue).isEmpty();
-        }
-
-        @Test
-        @DisplayName("test delete should throw CannotDeleteTagException")
-        void testDeleteShouldThrowCannotDeleteTagException() {
-            assertThrows(CannotDeleteTagException.class, () -> tagDao.delete(1L));
-        }
-
-        @Test
-        @DisplayName("test delete should throw CannotDeleteTagException with expected message")
-        void testDeleteShouldThrowCannotDeleteTagExceptionWithExpectedMessage() {
-            String expectedMessage = "You cannot delete the Tag, first you need to delete" +
-                                     " the GiftCertificate that contains this Tag";
-
-            Exception exception = assertThrows(CannotDeleteTagException.class, () -> tagDao.delete(1L));
-            String actualMessage = exception.getMessage();
-
-            assertThat(actualMessage).isEqualTo(expectedMessage);
         }
 
     }
