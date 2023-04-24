@@ -7,7 +7,7 @@ GET http://localhost:8080/gift_certificates/1
 Accept: application/json
 
 ###findAllWithTags
-GET http://localhost:8080/gift_certificates/findAllWithTags?tagName=Coca-cola&part=Very Big&sortBy=date&order=desc
+GET http://localhost:8080/gift_certificates/findAllWithTags?tagName=Pepsi&part=Litt&sortBy=date&order=desc
 Accept: application/json
 
 ###save
