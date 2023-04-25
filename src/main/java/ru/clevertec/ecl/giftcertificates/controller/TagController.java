@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.clevertec.ecl.giftcertificates.dto.DeleteResponse;
 import ru.clevertec.ecl.giftcertificates.dto.TagDto;
 import ru.clevertec.ecl.giftcertificates.service.TagService;
 
@@ -44,9 +45,9 @@ public class TagController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<DeleteResponse> delete(@PathVariable Long id) {
         tagService.delete(id);
-        return ResponseEntity.ok("Tag with ID " + id + " was successfully deleted");
+        return ResponseEntity.ok(new DeleteResponse("Tag with ID " + id + " was successfully deleted"));
     }
 
 }

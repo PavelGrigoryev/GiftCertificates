@@ -274,7 +274,9 @@ In summary the application can:
 * Request example:
 
 ````json
-"GiftCertificate with ID 3 was successfully deleted"
+{
+   "message": "GiftCertificate with ID 2 was successfully deleted"
+}
 ````
 
 * Bad Request example:
@@ -375,7 +377,9 @@ In summary the application can:
 * Response example:
 
 ````json
-"Tag with ID 6 was successfully deleted"
+{
+   "message": "Tag with ID 6 was successfully deleted"
+}
 ````
 
 * Bad Request example:

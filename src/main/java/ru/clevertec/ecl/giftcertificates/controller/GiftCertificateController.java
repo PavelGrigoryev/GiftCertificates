@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.clevertec.ecl.giftcertificates.dto.DeleteResponse;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
@@ -54,9 +55,9 @@ public class GiftCertificateController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<DeleteResponse> delete(@PathVariable Long id) {
         giftCertificateService.delete(id);
-        return ResponseEntity.ok("GiftCertificate with ID " + id + " was successfully deleted");
+        return ResponseEntity.ok( new DeleteResponse("GiftCertificate with ID " + id + " was successfully deleted"));
     }
 
 }
