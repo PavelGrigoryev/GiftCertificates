@@ -33,7 +33,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public List<GiftCertificate> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("SELECT gc FROM GiftCertificate gc", GiftCertificate.class)
+            return session.createQuery("SELECT gc FROM GiftCertificate gc JOIN fetch gc.tags t", GiftCertificate.class)
                     .getResultList();
         }
     }
@@ -69,7 +69,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         try (Session session = sessionFactory.openSession()) {
             StringBuilder sqlBuilder = new StringBuilder("SELECT gc FROM GiftCertificate gc ");
             if (tagName != null) {
-                sqlBuilder.append("JOIN gc.tags t WHERE t.name = :tagName ");
+                sqlBuilder.append("JOIN fetch gc.tags t WHERE t.name = :tagName ");
             }
             if (part != null) {
                 sqlBuilder.append(tagName == null ? "WHERE " : "AND ");

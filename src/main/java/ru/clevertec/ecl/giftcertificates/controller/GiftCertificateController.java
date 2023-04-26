@@ -57,7 +57,7 @@ public class GiftCertificateController {
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteResponse> delete(@PathVariable Long id) {
         giftCertificateService.delete(id);
-        return ResponseEntity.ok( new DeleteResponse("GiftCertificate with ID " + id + " was successfully deleted"));
+        return ResponseEntity.ok(new DeleteResponse("GiftCertificate with ID " + id + " was successfully deleted"));
     }
 
 }

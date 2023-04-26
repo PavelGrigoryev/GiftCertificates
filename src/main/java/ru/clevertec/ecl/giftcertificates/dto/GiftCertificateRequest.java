@@ -20,6 +20,8 @@ public class GiftCertificateRequest {
     private String description;
     private BigDecimal price;
     private Integer duration;
+
+    @Builder.Default
     private List<TagDto> tags = new ArrayList<>();
 
 }

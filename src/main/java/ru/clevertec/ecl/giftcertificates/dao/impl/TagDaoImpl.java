@@ -3,7 +3,6 @@ package ru.clevertec.ecl.giftcertificates.dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.MutationQuery;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.ecl.giftcertificates.dao.TagDao;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
@@ -95,14 +94,12 @@ public class TagDaoImpl implements TagDao {
             if (tag.isEmpty()) {
                 return Optional.empty();
             }
-            MutationQuery deleteTagRelation = session
-                    .createNativeMutationQuery("DELETE FROM gift_certificate_tag WHERE tag_id = :id")
-                    .setParameter("id", id);
-            MutationQuery deleteTag = session
-                    .createMutationQuery("DELETE FROM Tag WHERE id = :id")
-                    .setParameter("id", id);
-            deleteTagRelation.executeUpdate();
-            deleteTag.executeUpdate();
+            session.createNativeMutationQuery("DELETE FROM gift_certificate_tag WHERE tag_id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            session.createMutationQuery("DELETE FROM Tag WHERE id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
             session.getTransaction().commit();
             return tag;
         }
