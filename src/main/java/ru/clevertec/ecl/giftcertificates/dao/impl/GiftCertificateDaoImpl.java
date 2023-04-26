@@ -48,7 +48,10 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public Optional<GiftCertificate> findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            return Optional.ofNullable(session.get(GiftCertificate.class, id));
+            return session.createQuery("SELECT gc FROM GiftCertificate gc JOIN fetch gc.tags WHERE gc.id = :id",
+                            GiftCertificate.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional();
         }
     }
 
