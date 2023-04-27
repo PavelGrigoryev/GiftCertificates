@@ -13,7 +13,6 @@ import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -94,9 +93,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
-        LocalDateTime now = LocalDateTime.now();
-        giftCertificate.setCreateDate(now);
-        giftCertificate.setLastUpdateDate(now);
         GiftCertificate saved = giftCertificateDao.save(giftCertificate);
         GiftCertificateResponse savedDto = giftCertificateMapper.toResponse(saved);
         log.info("save {}", savedDto);
@@ -117,7 +113,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificate byId = giftCertificateDao.findById(giftCertificate.getId())
                 .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID " + giftCertificate.getId() + " does not exist"));
         giftCertificate.setCreateDate(byId.getCreateDate());
-        giftCertificate.setLastUpdateDate(LocalDateTime.now());
         checkFieldsForNull(giftCertificate, byId);
         GiftCertificate updated = giftCertificateDao.update(giftCertificate);
         GiftCertificateResponse updatedDto = giftCertificateMapper.toResponse(updated);

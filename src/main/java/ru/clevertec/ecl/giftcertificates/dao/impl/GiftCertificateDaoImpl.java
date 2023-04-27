@@ -33,7 +33,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public List<GiftCertificate> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("SELECT gc FROM GiftCertificate gc JOIN fetch gc.tags t", GiftCertificate.class)
+            return session.createQuery("SELECT gc FROM GiftCertificate gc LEFT JOIN fetch gc.tags t",
+                            GiftCertificate.class)
                     .getResultList();
         }
     }
@@ -48,7 +49,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public Optional<GiftCertificate> findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("SELECT gc FROM GiftCertificate gc JOIN fetch gc.tags WHERE gc.id = :id",
+            return session.createQuery("SELECT gc FROM GiftCertificate gc LEFT JOIN fetch gc.tags WHERE gc.id = :id",
                             GiftCertificate.class)
                     .setParameter("id", id)
                     .uniqueResultOptional();
@@ -70,9 +71,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public List<GiftCertificate> findAllWithTags(String tagName, String part, String sortBy, String order) {
         try (Session session = sessionFactory.openSession()) {
-            StringBuilder sqlBuilder = new StringBuilder("SELECT gc FROM GiftCertificate gc ");
+            StringBuilder sqlBuilder = new StringBuilder("SELECT gc FROM GiftCertificate gc LEFT JOIN fetch gc.tags t ");
             if (tagName != null) {
-                sqlBuilder.append("JOIN fetch gc.tags t WHERE t.name = :tagName ");
+                sqlBuilder.append("JOIN fetch gc.tags WHERE t.name = :tagName ");
             }
             if (part != null) {
                 sqlBuilder.append(tagName == null ? "WHERE " : "AND ");
