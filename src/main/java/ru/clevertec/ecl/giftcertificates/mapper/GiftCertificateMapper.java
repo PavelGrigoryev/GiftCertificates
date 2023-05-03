@@ -6,7 +6,7 @@ import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 
-@Mapper
+@Mapper(uses = TagMapper.class)
 public interface GiftCertificateMapper {
 
     GiftCertificateResponse toResponse(GiftCertificate giftCertificate);

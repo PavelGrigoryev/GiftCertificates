@@ -1,9 +1,10 @@
 package ru.clevertec.ecl.giftcertificates.dao.impl;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.giftcertificates.dao.TagDao;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 
@@ -12,14 +13,14 @@ import java.util.Optional;
 
 /**
  * The TagDaoImpl class implements the TagDao interface and provides the implementation for CRUD operations on the
- * {@link Tag} entity using Hibernate. It uses a {@link SessionFactory} object to interact with the database
- * and manage transactions.
+ * {@link Tag} entity using Hibernate. It uses a {@link EntityManager} object to interact with the database.
+ * For manage transactions it uses annotation {@link Transactional}
  */
 @Repository
 @RequiredArgsConstructor
 public class TagDaoImpl implements TagDao {
 
-    private final SessionFactory sessionFactory;
+    private final EntityManager entityManager;
 
     /**
      * Finds all {@link Tag} entities from database.
@@ -28,9 +29,7 @@ public class TagDaoImpl implements TagDao {
      */
     @Override
     public List<Tag> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
-        }
+        return entityManager.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
     }
 
     /**
@@ -42,9 +41,7 @@ public class TagDaoImpl implements TagDao {
      */
     @Override
     public Optional<Tag> findById(Long id) {
-        try (Session session = sessionFactory.openSession()) {
-            return Optional.ofNullable(session.get(Tag.class, id));
-        }
+        return Optional.ofNullable(entityManager.find(Tag.class, id));
     }
 
     /**
@@ -53,14 +50,11 @@ public class TagDaoImpl implements TagDao {
      * @param tag the Tag entity to save.
      * @return the saved Tag entity.
      */
+    @Transactional
     @Override
     public Tag save(Tag tag) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.persist(tag);
-            session.getTransaction().commit();
-            return tag;
-        }
+        entityManager.persist(tag);
+        return tag;
     }
 
     /**
@@ -69,14 +63,10 @@ public class TagDaoImpl implements TagDao {
      * @param tag the Tag entity to update.
      * @return the updated Tag entity.
      */
+    @Transactional
     @Override
     public Tag update(Tag tag) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Tag merged = session.merge(tag);
-            session.getTransaction().commit();
-            return merged;
-        }
+        return entityManager.merge(tag);
     }
 
     /**
@@ -86,23 +76,21 @@ public class TagDaoImpl implements TagDao {
      * @return an {@link Optional} containing the deleted Tag entity, or an empty Optional if no such entity
      * exists in the database.
      */
+    @Transactional
     @Override
     public Optional<Tag> delete(Long id) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Tag> tag = findById(id);
-            if (tag.isEmpty()) {
-                return Optional.empty();
-            }
-            session.createNativeMutationQuery("DELETE FROM gift_certificate_tag WHERE tag_id = :id")
-                    .setParameter("id", id)
-                    .executeUpdate();
-            session.createMutationQuery("DELETE FROM Tag WHERE id = :id")
-                    .setParameter("id", id)
-                    .executeUpdate();
-            session.getTransaction().commit();
-            return tag;
+        Optional<Tag> tag = findById(id);
+        if (tag.isEmpty()) {
+            return Optional.empty();
         }
+        Session session = entityManager.unwrap(Session.class);
+        session.createNativeMutationQuery("DELETE FROM gift_certificate_tag WHERE tag_id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+        session.createMutationQuery("DELETE FROM Tag WHERE id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+        return tag;
     }
 
 }
