@@ -2,37 +2,37 @@ package ru.clevertec.ecl.giftcertificates.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class GiftCertificateResponse {
+@JsonPropertyOrder({
+        "id",
+        "name",
+        "description",
+        "price",
+        "duration",
+        "create_date",
+        "last_update_date",
+        "tags"
+})
+public record GiftCertificateResponse(
+        Long id,
+        String name,
+        String description,
+        BigDecimal price,
+        Integer duration,
 
-    private Long id;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private Integer duration;
+        @JsonProperty("create_date")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+        LocalDateTime createDate,
 
-    @JsonProperty("create_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
-    private LocalDateTime createDate;
+        @JsonProperty("last_update_date")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+        LocalDateTime lastUpdateDate,
 
-    @JsonProperty("last_update_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
-    private LocalDateTime lastUpdateDate;
-
-    @Builder.Default
-    private List<TagDto> tags = new ArrayList<>();
-
+        List<TagDto> tags
+) {
 }

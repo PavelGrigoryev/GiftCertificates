@@ -1,17 +1,7 @@
 package ru.clevertec.ecl.giftcertificates.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class TagDto {
-
-    private Long id;
-    private String name;
-
+@JsonPropertyOrder({"id", "name"})
+public record TagDto(Long id, String name) {
 }
