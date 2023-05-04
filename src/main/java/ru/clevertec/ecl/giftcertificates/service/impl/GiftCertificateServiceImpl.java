@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
+import ru.clevertec.ecl.giftcertificates.dto.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchGiftCertificateException;
 import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
@@ -80,7 +81,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * Saves one {@link GiftCertificate}.
      *
      * @param giftCertificateRequest the {@link GiftCertificateRequest} which will be mapped to GiftCertificate
-     *                               and saved in database by dao.
+     *                               and saved in database by repository.
      * @return the saved {@link GiftCertificateResponse} which was mapped from GiftCertificate entity.
      */
     @Override
@@ -98,19 +99,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     /**
      * Updates one {@link GiftCertificate}.
      *
-     * @param giftCertificateRequest the {@link GiftCertificateRequest} which will be mapped to GiftCertificate and
-     *                               updated in database by dao (updated only fields, that pass in GiftCertificateRequest).
+     * @param request the {@link PriceDurationUpdateRequest} which will be mapped to GiftCertificate and
+     *                updated in database by repository (updated only fields, that pass in PriceDurationUpdateRequest).
      * @return the updated {@link GiftCertificateResponse} which was mapped from GiftCertificate entity.
      * @throws NoSuchGiftCertificateException if GiftCertificate is not exists by finding it by ID.
      */
     @Override
-    public GiftCertificateResponse update(GiftCertificateRequest giftCertificateRequest) {
-        GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
-        GiftCertificate byId = giftCertificateRepository.findById(giftCertificate.getId())
-                .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID " + giftCertificate.getId() + " does not exist"));
-        giftCertificate.setCreateDate(byId.getCreateDate());
-        giftCertificate.setLastUpdateDate(LocalDateTime.now());
-        checkFieldsForNull(giftCertificate, byId);
+    public GiftCertificateResponse update(PriceDurationUpdateRequest request) {
+        GiftCertificate byId = giftCertificateRepository.findById(request.id())
+                .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID " + request.id() + " does not exist"));
+        GiftCertificate giftCertificate = createUpdatedGiftCertificate(request, byId);
         GiftCertificate updated = giftCertificateRepository.save(giftCertificate);
         GiftCertificateResponse updatedDto = giftCertificateMapper.toResponse(updated);
         log.info("update {}", updatedDto);
@@ -133,20 +131,24 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     /**
-     * Checks all fields of {@link GiftCertificate} for null, if they null - sets old fields from GiftCertificate that
-     * was found by ID.
+     * Create {@link GiftCertificate} for update in database. Check price and duration fields for null, if they null
+     * - sets old fields from GiftCertificate that was found by ID.
      *
-     * @param giftCertificate the GiftCertificate from {@link GiftCertificateRequest}.
-     * @param byId            the existing GiftCertificate that was found by ID.
+     * @param request the request from {@link PriceDurationUpdateRequest}.
+     * @param byId    the existing GiftCertificate that was found by ID.
+     * @return the created GiftCertificate
      */
-    private static void checkFieldsForNull(GiftCertificate giftCertificate, GiftCertificate byId) {
-        giftCertificate.setName(giftCertificate.getName() != null ? giftCertificate.getName() : byId.getName());
-        giftCertificate.setDescription(giftCertificate.getDescription() != null
-                ? giftCertificate.getDescription() : byId.getDescription());
-        giftCertificate.setPrice(giftCertificate.getPrice() != null ? giftCertificate.getPrice() : byId.getPrice());
-        giftCertificate.setDuration(giftCertificate.getDuration() != null
-                ? giftCertificate.getDuration() : byId.getDuration());
-        giftCertificate.setTags(!giftCertificate.getTags().isEmpty() ? giftCertificate.getTags() : byId.getTags());
+    private static GiftCertificate createUpdatedGiftCertificate(PriceDurationUpdateRequest request, GiftCertificate byId) {
+        return GiftCertificate.builder()
+                .id(byId.getId())
+                .name(byId.getName())
+                .description(byId.getDescription())
+                .price(request.price() != null ? request.price() : byId.getPrice())
+                .duration(request.duration() != null ? request.duration() : byId.getDuration())
+                .createDate(byId.getCreateDate())
+                .lastUpdateDate(LocalDateTime.now())
+                .tags(byId.getTags())
+                .build();
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.clevertec.ecl.giftcertificates.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,6 +15,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.TestConstructor;
 import ru.clevertec.ecl.giftcertificates.dao.TagDao;
 import ru.clevertec.ecl.giftcertificates.dto.TagDto;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchTagException;
@@ -34,6 +36,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@RequiredArgsConstructor
 @ExtendWith(MockitoExtension.class)
 class TagServiceImplTest {
 
@@ -41,7 +45,7 @@ class TagServiceImplTest {
     private TagService tagService;
     @Mock
     private TagDao tagDao;
-    private final TagMapper tagMapper = Mappers.getMapper(TagMapper.class);
+    private final TagMapper tagMapper;
     private static final TagTestBuilder TEST_BUILDER = TagTestBuilder.aTag();
     @Captor
     private ArgumentCaptor<Tag> captor;

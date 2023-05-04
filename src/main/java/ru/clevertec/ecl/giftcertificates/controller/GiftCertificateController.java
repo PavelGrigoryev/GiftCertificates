@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.ecl.giftcertificates.dto.DeleteResponse;
+import ru.clevertec.ecl.giftcertificates.dto.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
@@ -45,8 +46,8 @@ public class GiftCertificateController {
     }
 
     @PutMapping
-    public ResponseEntity<GiftCertificateResponse> update(@RequestBody GiftCertificateRequest giftCertificateRequest) {
-        return ResponseEntity.ok(giftCertificateService.update(giftCertificateRequest));
+    public ResponseEntity<GiftCertificateResponse> update(@RequestBody PriceDurationUpdateRequest request) {
+        return ResponseEntity.ok(giftCertificateService.update(request));
     }
 
     @DeleteMapping("/{id}")

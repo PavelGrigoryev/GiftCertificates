@@ -30,25 +30,9 @@ PUT http://localhost:8080/gift-certificates
 Content-Type: application/json
 
 {
-  "id": 1,
-  "name": "Salsa",
-  "description": "Little",
-  "price": 13.64,
-  "duration": 5,
-  "tags": [
-    {
-      "id": 1,
-      "name": "Pepsi"
-    },
-    {
-      "id": 2,
-      "name": "Mirinda"
-    },
-    {
-      "id": 3,
-      "name": "7-Up"
-    }
-  ]
+  "id": 2,
+  "price": 777.56,
+  "duration": 11
 }
 
 ###delete

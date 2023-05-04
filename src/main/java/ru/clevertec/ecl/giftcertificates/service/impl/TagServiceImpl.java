@@ -66,7 +66,7 @@ public class TagServiceImpl implements TagService {
     /**
      * Saves one {@link Tag}.
      *
-     * @param tagDto the {@link TagDto} which will be mapped to Tag and saved in database by dao.
+     * @param tagDto the {@link TagDto} which will be mapped to Tag and saved in database by repository.
      * @return the saved TagDto which was mapped from Tag entity.
      */
     @Override
@@ -81,7 +81,7 @@ public class TagServiceImpl implements TagService {
     /**
      * Updates one {@link Tag}.
      *
-     * @param tagDto the {@link TagDto} which will be mapped to Tag and updated in database by dao.
+     * @param tagDto the {@link TagDto} which will be mapped to Tag and updated in database by repository.
      * @return the updated TagDto which was mapped from Tag entity, if name is same - returns same TagDto without update.
      * @throws NoSuchTagException if Tag is not exists by finding it by ID.
      */

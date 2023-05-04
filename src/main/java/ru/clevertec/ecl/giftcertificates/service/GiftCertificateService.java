@@ -1,5 +1,6 @@
 package ru.clevertec.ecl.giftcertificates.service;
 
+import ru.clevertec.ecl.giftcertificates.dto.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 
@@ -13,7 +14,7 @@ public interface GiftCertificateService {
 
     GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest);
 
-    GiftCertificateResponse update(GiftCertificateRequest giftCertificateRequest);
+    GiftCertificateResponse update(PriceDurationUpdateRequest request);
 
     void delete(Long id);
 
