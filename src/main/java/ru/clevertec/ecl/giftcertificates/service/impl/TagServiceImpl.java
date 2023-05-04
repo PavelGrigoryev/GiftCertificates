@@ -2,10 +2,12 @@ package ru.clevertec.ecl.giftcertificates.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.giftcertificates.dto.TagDto;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchTagException;
+import ru.clevertec.ecl.giftcertificates.exception.NoTagWithTheSameNameException;
 import ru.clevertec.ecl.giftcertificates.mapper.TagMapper;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 import ru.clevertec.ecl.giftcertificates.repository.TagRepository;
@@ -68,11 +70,17 @@ public class TagServiceImpl implements TagService {
      *
      * @param tagDto the {@link TagDto} which will be mapped to Tag and saved in database by repository.
      * @return the saved TagDto which was mapped from Tag entity.
+     * @throws NoTagWithTheSameNameException if Tag is already exist with the same name.
      */
     @Override
     public TagDto save(TagDto tagDto) {
         Tag tag = tagMapper.fromDto(tagDto);
-        Tag saved = tagRepository.save(tag);
+        Tag saved;
+        try {
+            saved = tagRepository.save(tag);
+        } catch (DataIntegrityViolationException e) {
+            throw new NoTagWithTheSameNameException("Tag name " + tag.getName() + " is already exist! It must be unique!");
+        }
         TagDto savedDto = tagMapper.toDto(saved);
         log.info("save {}", savedDto);
         return savedDto;
@@ -84,6 +92,7 @@ public class TagServiceImpl implements TagService {
      * @param tagDto the {@link TagDto} which will be mapped to Tag and updated in database by repository.
      * @return the updated TagDto which was mapped from Tag entity, if name is same - returns same TagDto without update.
      * @throws NoSuchTagException if Tag is not exists by finding it by ID.
+     * @throws NoTagWithTheSameNameException if Tag is already exist with the same name.
      */
     @Override
     public TagDto update(TagDto tagDto) {
@@ -94,7 +103,12 @@ public class TagServiceImpl implements TagService {
             log.info("no update {}", tagDto);
             return tagDto;
         }
-        Tag updated = tagRepository.save(tag);
+        Tag updated;
+        try {
+            updated = tagRepository.saveAndFlush(tag);
+        } catch (DataIntegrityViolationException e) {
+            throw new NoTagWithTheSameNameException("Tag name " + tag.getName() + " is already exist! It must be unique!");
+        }
         TagDto updatedDto = tagMapper.toDto(updated);
         log.info("update {}", updatedDto);
         return updatedDto;

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchGiftCertificateException;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchTagException;
+import ru.clevertec.ecl.giftcertificates.exception.NoTagWithTheSameNameException;
 
 /**
  * This GiftCertificatesExceptionHandler class handles exceptions and returns appropriate error responses.
@@ -43,6 +44,20 @@ public class GiftCertificatesExceptionHandler {
         incorrectData.setErrorCode(HttpStatus.NOT_FOUND.toString());
         log.error(incorrectData.toString());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(incorrectData);
+    }
+
+    /**
+     * Handles {@link NoTagWithTheSameNameException} and returns a 406 Not Acceptable response with an error message.
+     *
+     * @param exception The NoTagWithTheSameNameException to handle.
+     * @return A ResponseEntity containing an {@link IncorrectData} object and a 406 status code.
+     */
+    @ExceptionHandler(NoTagWithTheSameNameException.class)
+    public ResponseEntity<IncorrectData> noTagWithTheSameNameException(NoTagWithTheSameNameException exception) {
+        incorrectData.setErrorMessage(exception.getMessage());
+        incorrectData.setErrorCode(HttpStatus.NOT_ACCEPTABLE.toString());
+        log.error(incorrectData.toString());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(incorrectData);
     }
 
 }

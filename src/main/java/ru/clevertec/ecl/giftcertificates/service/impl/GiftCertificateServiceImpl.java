@@ -1,5 +1,7 @@
 package ru.clevertec.ecl.giftcertificates.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -9,10 +11,12 @@ import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.dto.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchGiftCertificateException;
+import ru.clevertec.ecl.giftcertificates.exception.NoTagWithTheSameNameException;
 import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 import ru.clevertec.ecl.giftcertificates.repository.GiftCertificateRepository;
+import ru.clevertec.ecl.giftcertificates.repository.TagRepository;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 
 import java.time.LocalDateTime;
@@ -32,7 +36,9 @@ import java.util.List;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private final GiftCertificateRepository giftCertificateRepository;
+    private final TagRepository tagRepository;
     private final GiftCertificateMapper giftCertificateMapper;
+    private final EntityManager entityManager;
 
     /**
      * Finds one {@link GiftCertificateResponse} by ID.
@@ -83,13 +89,29 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @param giftCertificateRequest the {@link GiftCertificateRequest} which will be mapped to GiftCertificate
      *                               and saved in database by repository.
      * @return the saved {@link GiftCertificateResponse} which was mapped from GiftCertificate entity.
+     * @throws NoTagWithTheSameNameException if Tag is already exist with the same name.
      */
     @Override
     public GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
+        List<Tag> byNameIn = tagRepository.findByNameIn(giftCertificate.getTags()
+                .stream()
+                .map(Tag::getName)
+                .toList());
+        giftCertificate.getTags().forEach(tag -> byNameIn
+                .forEach(byName -> {
+                    if (tag.getName().equals(byName.getName())) {
+                        tag.setId(byName.getId());
+                    }
+                }));
         LocalDateTime now = LocalDateTime.now();
         giftCertificate.setCreateDate(now);
         giftCertificate.setLastUpdateDate(now);
+        try {
+            giftCertificate = entityManager.merge(giftCertificate);
+        } catch (PersistenceException | IllegalStateException e) {
+            throw new NoTagWithTheSameNameException("There should be no tags with the same name!");
+        }
         GiftCertificate saved = giftCertificateRepository.save(giftCertificate);
         GiftCertificateResponse savedDto = giftCertificateMapper.toResponse(saved);
         log.info("save {}", savedDto);

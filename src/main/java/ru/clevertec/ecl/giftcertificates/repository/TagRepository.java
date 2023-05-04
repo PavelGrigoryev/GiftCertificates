@@ -7,12 +7,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 
+import java.util.List;
+
 /**
  * The TagRepository class implements the {@link JpaRepository} interface and provides the implementation
  * for CRUD operations on the {@link Tag}.
  */
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
+
+    /**
+     * Finds list of Tags by list of Tag names.
+     *
+     * @param names the list of {@link Tag} names.
+     * @return the list of Tags.
+     */
+    List<Tag> findByNameIn(List<String> names);
 
     /**
      * Deletes relation with GiftCertificate in database.
