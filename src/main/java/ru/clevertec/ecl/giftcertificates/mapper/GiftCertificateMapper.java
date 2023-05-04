@@ -1,18 +1,16 @@
 package ru.clevertec.ecl.giftcertificates.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 
-@Mapper(uses = TagMapper.class)
+@Mapper(componentModel = "spring", uses = TagMapper.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface GiftCertificateMapper {
 
     GiftCertificateResponse toResponse(GiftCertificate giftCertificate);
 
-    @Mapping(target = "createDate", ignore = true)
-    @Mapping(target = "lastUpdateDate", ignore = true)
     GiftCertificate fromRequest(GiftCertificateRequest giftCertificateRequest);
 
     GiftCertificateRequest toRequest(GiftCertificate giftCertificate);

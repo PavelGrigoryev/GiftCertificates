@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import ru.clevertec.ecl.giftcertificates.dto.TagDto;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TagMapper {
 
     TagDto toDto(Tag tag);

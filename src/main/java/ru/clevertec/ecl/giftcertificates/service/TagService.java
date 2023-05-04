@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface TagService {
 
-    List<TagDto> findAll();
-
     TagDto findById(Long id);
+
+    List<TagDto> findAll();
 
     TagDto save(TagDto tagDto);
 

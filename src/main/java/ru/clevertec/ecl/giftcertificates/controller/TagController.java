@@ -24,14 +24,14 @@ public class TagController {
 
     private final TagService tagService;
 
-    @GetMapping
-    public ResponseEntity<List<TagDto>> findAll() {
-        return ResponseEntity.ok(tagService.findAll());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<TagDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(tagService.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TagDto>> findAll() {
+        return ResponseEntity.ok(tagService.findAll());
     }
 
     @PostMapping

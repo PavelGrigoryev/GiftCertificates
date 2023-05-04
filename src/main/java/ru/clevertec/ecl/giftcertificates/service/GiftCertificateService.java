@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface GiftCertificateService {
 
-    List<GiftCertificateResponse> findAll();
-
     GiftCertificateResponse findById(Long id);
 
     List<GiftCertificateResponse> findAllWithTags(String tagName, String part, String sortBy, String order);

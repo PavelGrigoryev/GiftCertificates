@@ -3,7 +3,6 @@ package ru.clevertec.ecl.giftcertificates.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import ru.clevertec.ecl.giftcertificates.model.listener.GiftCertificateTimeListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -34,7 +32,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "gift_certificate")
-@EntityListeners(GiftCertificateTimeListener.class)
 public class GiftCertificate {
 
     @Id

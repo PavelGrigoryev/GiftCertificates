@@ -1,17 +1,13 @@
-###findAll
-GET http://localhost:8080/gift_certificates
-Accept: application/json
-
 ###findById
-GET http://localhost:8080/gift_certificates/1
+GET http://localhost:8080/gift-certificates/2
 Accept: application/json
 
 ###findAllWithTags
-GET http://localhost:8080/gift_certificates/findAllWithTags?tagName=Pepsi&part=Litt&sortBy=date&order=desc
+GET http://localhost:8080/gift-certificates?tagName=Pepsi&part=Litt&sortBy=date&order=desc
 Accept: application/json
 
 ###save
-POST http://localhost:8080/gift_certificates
+POST http://localhost:8080/gift-certificates
 Content-Type: application/json
 
 {
@@ -30,7 +26,7 @@ Content-Type: application/json
 }
 
 ###update
-PUT http://localhost:8080/gift_certificates
+PUT http://localhost:8080/gift-certificates
 Content-Type: application/json
 
 {
@@ -56,5 +52,5 @@ Content-Type: application/json
 }
 
 ###delete
-DELETE http://localhost:8080/gift_certificates/2
+DELETE http://localhost:8080/gift-certificates/1
 Content-Type: application/json

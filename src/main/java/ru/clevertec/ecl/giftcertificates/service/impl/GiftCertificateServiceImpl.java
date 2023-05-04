@@ -2,50 +2,36 @@ package ru.clevertec.ecl.giftcertificates.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.clevertec.ecl.giftcertificates.dao.GiftCertificateDao;
+import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchGiftCertificateException;
 import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
+import ru.clevertec.ecl.giftcertificates.repository.GiftCertificateRepository;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * The GiftCertificateServiceImpl class implements GiftCertificateService interface and provides the implementation
  * for CRUD operations on the {@link GiftCertificate} entity and also adds new functionality, such as convert to dto
  * {@link GiftCertificateResponse} from entity and from dto {@link GiftCertificateRequest} to entity. It uses a
- * {@link GiftCertificateDao} to interact with the database and {@link GiftCertificateMapper} to map entity to dto and
- * from dto to entity.
+ * {@link GiftCertificateRepository} to interact with the database and {@link GiftCertificateMapper} to map entity
+ * to dto and from dto to entity. For manage transactions it uses annotation {@link Transactional}.
  */
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
-    private final GiftCertificateDao giftCertificateDao;
-    private final GiftCertificateMapper giftCertificateMapper = Mappers.getMapper(GiftCertificateMapper.class);
-
-    /**
-     * Finds all {@link GiftCertificateResponse}.
-     *
-     * @return a sorted by id and mapped from entity to dto list of all GiftCertificateResponse.
-     */
-    @Override
-    public List<GiftCertificateResponse> findAll() {
-        List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findAll()
-                .stream()
-                .sorted(Comparator.comparing(GiftCertificate::getId))
-                .map(giftCertificateMapper::toResponse)
-                .toList();
-        log.info("findAll {} GiftCertificates size", giftCertificates.size());
-        return giftCertificates;
-    }
+    private final GiftCertificateRepository giftCertificateRepository;
+    private final GiftCertificateMapper giftCertificateMapper;
 
     /**
      * Finds one {@link GiftCertificateResponse} by ID.
@@ -55,8 +41,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @throws NoSuchGiftCertificateException if GiftCertificate is not exists by finding it by ID.
      */
     @Override
+    @Transactional(readOnly = true)
     public GiftCertificateResponse findById(Long id) {
-        GiftCertificateResponse giftCertificateResponse = giftCertificateDao.findById(id)
+        GiftCertificateResponse giftCertificateResponse = giftCertificateRepository.findById(id)
                 .map(giftCertificateMapper::toResponse)
                 .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID " + id + " does not exist"));
         log.info("findById {}", giftCertificateResponse);
@@ -74,13 +61,19 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @return a filtered and sorted by one or many parameters list of GiftCertificateResponse.
      */
     @Override
+    @Transactional(readOnly = true)
     public List<GiftCertificateResponse> findAllWithTags(String tagName, String part, String sortBy, String order) {
-        List<GiftCertificateResponse> giftCertificates = giftCertificateDao.findAllWithTags(tagName, part, sortBy, order)
-                .stream()
+        String sort = "date".equalsIgnoreCase(sortBy) ? "createDate" : "name";
+        Sort by = sortBy != null ? Sort.by(sort) : Sort.by("id");
+        by = "DESC".equalsIgnoreCase(order) ? by.descending() : by.ascending();
+        List<GiftCertificate> giftCertificates = tagName != null
+                ? giftCertificateRepository.findAllWithTags(tagName, part, by)
+                : giftCertificateRepository.findAllWithTags(part, by);
+        List<GiftCertificateResponse> giftCertificateResponses = giftCertificates.stream()
                 .map(giftCertificateMapper::toResponse)
                 .toList();
-        log.info("findAllWithTags {} GiftCertificates size", giftCertificates.size());
-        return giftCertificates;
+        log.info("findAllWithTags {} GiftCertificates size", giftCertificateResponses.size());
+        return giftCertificateResponses;
     }
 
     /**
@@ -93,7 +86,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
-        GiftCertificate saved = giftCertificateDao.save(giftCertificate);
+        LocalDateTime now = LocalDateTime.now();
+        giftCertificate.setCreateDate(now);
+        giftCertificate.setLastUpdateDate(now);
+        GiftCertificate saved = giftCertificateRepository.save(giftCertificate);
         GiftCertificateResponse savedDto = giftCertificateMapper.toResponse(saved);
         log.info("save {}", savedDto);
         return savedDto;
@@ -110,11 +106,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateResponse update(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
-        GiftCertificate byId = giftCertificateDao.findById(giftCertificate.getId())
+        GiftCertificate byId = giftCertificateRepository.findById(giftCertificate.getId())
                 .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID " + giftCertificate.getId() + " does not exist"));
         giftCertificate.setCreateDate(byId.getCreateDate());
+        giftCertificate.setLastUpdateDate(LocalDateTime.now());
         checkFieldsForNull(giftCertificate, byId);
-        GiftCertificate updated = giftCertificateDao.update(giftCertificate);
+        GiftCertificate updated = giftCertificateRepository.save(giftCertificate);
         GiftCertificateResponse updatedDto = giftCertificateMapper.toResponse(updated);
         log.info("update {}", updatedDto);
         return updatedDto;
@@ -128,9 +125,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      */
     @Override
     public void delete(Long id) {
-        GiftCertificate giftCertificate = giftCertificateDao.delete(id)
+        GiftCertificate giftCertificate = giftCertificateRepository.findById(id)
                 .orElseThrow(() ->
                         new NoSuchGiftCertificateException("There is no GiftCertificate with ID " + id + " to delete"));
+        giftCertificateRepository.delete(giftCertificate);
         log.info("delete {}", giftCertificate);
     }
 

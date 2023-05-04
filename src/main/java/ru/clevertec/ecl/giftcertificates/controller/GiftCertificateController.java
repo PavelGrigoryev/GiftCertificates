@@ -21,22 +21,17 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/gift_certificates")
+@RequestMapping("/gift-certificates")
 public class GiftCertificateController {
 
     private final GiftCertificateService giftCertificateService;
-
-    @GetMapping
-    public ResponseEntity<List<GiftCertificateResponse>> findAll() {
-        return ResponseEntity.ok(giftCertificateService.findAll());
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<GiftCertificateResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
-    @GetMapping("/findAllWithTags")
+    @GetMapping
     public ResponseEntity<List<GiftCertificateResponse>> findAllWithTags(@RequestParam(required = false) String tagName,
                                                                          @RequestParam(required = false) String part,
                                                                          @RequestParam(required = false) String sortBy,
