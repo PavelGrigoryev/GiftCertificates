@@ -16,10 +16,9 @@ import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 import ru.clevertec.ecl.giftcertificates.repository.GiftCertificateRepository;
-import ru.clevertec.ecl.giftcertificates.repository.TagRepository;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
+import ru.clevertec.ecl.giftcertificates.service.TagService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -36,7 +35,7 @@ import java.util.List;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private final GiftCertificateRepository giftCertificateRepository;
-    private final TagRepository tagRepository;
+    private final TagService tagService;
     private final GiftCertificateMapper giftCertificateMapper;
     private final EntityManager entityManager;
 
@@ -94,7 +93,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
-        List<Tag> byNameIn = tagRepository.findByNameIn(giftCertificate.getTags()
+        List<Tag> byNameIn = tagService.findByNameIn(giftCertificate.getTags()
                 .stream()
                 .map(Tag::getName)
                 .toList());
@@ -104,9 +103,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                         tag.setId(byName.getId());
                     }
                 }));
-        LocalDateTime now = LocalDateTime.now();
-        giftCertificate.setCreateDate(now);
-        giftCertificate.setLastUpdateDate(now);
         try {
             giftCertificate = entityManager.merge(giftCertificate);
         } catch (PersistenceException | IllegalStateException e) {
@@ -131,7 +127,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificate byId = giftCertificateRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID " + request.id() + " does not exist"));
         GiftCertificate giftCertificate = createUpdatedGiftCertificate(request, byId);
-        GiftCertificate updated = giftCertificateRepository.save(giftCertificate);
+        GiftCertificate updated = giftCertificateRepository.saveAndFlush(giftCertificate);
         GiftCertificateResponse updatedDto = giftCertificateMapper.toResponse(updated);
         log.info("update {}", updatedDto);
         return updatedDto;
@@ -168,7 +164,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .price(request.price() != null ? request.price() : byId.getPrice())
                 .duration(request.duration() != null ? request.duration() : byId.getDuration())
                 .createDate(byId.getCreateDate())
-                .lastUpdateDate(LocalDateTime.now())
                 .tags(byId.getTags())
                 .build();
     }

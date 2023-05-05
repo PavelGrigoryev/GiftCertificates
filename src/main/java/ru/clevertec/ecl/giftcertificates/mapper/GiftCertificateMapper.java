@@ -11,6 +11,8 @@ public interface GiftCertificateMapper {
 
     GiftCertificateResponse toResponse(GiftCertificate giftCertificate);
 
+    GiftCertificate fromResponse(GiftCertificateResponse giftCertificateResponse);
+
     GiftCertificate fromRequest(GiftCertificateRequest giftCertificateRequest);
 
     GiftCertificateRequest toRequest(GiftCertificate giftCertificate);

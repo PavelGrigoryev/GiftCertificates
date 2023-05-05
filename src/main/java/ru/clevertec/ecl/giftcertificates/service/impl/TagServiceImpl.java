@@ -91,7 +91,7 @@ public class TagServiceImpl implements TagService {
      *
      * @param tagDto the {@link TagDto} which will be mapped to Tag and updated in database by repository.
      * @return the updated TagDto which was mapped from Tag entity, if name is same - returns same TagDto without update.
-     * @throws NoSuchTagException if Tag is not exists by finding it by ID.
+     * @throws NoSuchTagException            if Tag is not exists by finding it by ID.
      * @throws NoTagWithTheSameNameException if Tag is already exist with the same name.
      */
     @Override
@@ -127,6 +127,19 @@ public class TagServiceImpl implements TagService {
         tagRepository.deleteRelation(id);
         tagRepository.deleteById(id);
         log.info("delete {}", tag);
+    }
+
+    /**
+     * Finds list of Tags by list of Tag names.
+     *
+     * @param names the list of {@link Tag} names.
+     * @return the list of Tags.
+     */
+    @Override
+    public List<Tag> findByNameIn(List<String> names) {
+        List<Tag> byNameIn = tagRepository.findByNameIn(names);
+        log.info("findByNameIn {} Tags size", byNameIn.size());
+        return byNameIn;
     }
 
 }
