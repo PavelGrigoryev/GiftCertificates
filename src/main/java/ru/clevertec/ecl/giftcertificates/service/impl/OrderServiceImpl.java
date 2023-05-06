@@ -6,10 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.clevertec.ecl.giftcertificates.dto.pagination.OrderPageRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.MakeAnOrderRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.OrderDto;
-import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
+import ru.clevertec.ecl.giftcertificates.dto.pagination.OrderPageRequest;
 import ru.clevertec.ecl.giftcertificates.mapper.OrderMapper;
 import ru.clevertec.ecl.giftcertificates.mapper.UserMapper;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
@@ -20,6 +19,7 @@ import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 import ru.clevertec.ecl.giftcertificates.service.OrderService;
 import ru.clevertec.ecl.giftcertificates.service.UserService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -33,17 +33,18 @@ public class OrderServiceImpl implements OrderService {
     private final GiftCertificateService giftCertificateService;
     private final OrderMapper orderMapper;
     private final UserMapper userMapper;
-    private final GiftCertificateMapper giftCertificateMapper;
 
     @Override
     public OrderDto makeAnOrder(MakeAnOrderRequest request) {
         User user = userMapper.fromDto(userService.findById(request.userId()));
-        GiftCertificate giftCertificate =
-                giftCertificateMapper.fromResponse(giftCertificateService.findById(request.giftId()));
+        List<GiftCertificate> giftCertificates = giftCertificateService.findAllByIdIn(request.giftIds());
+        BigDecimal sum = giftCertificates.stream()
+                .map(GiftCertificate::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         Order order = Order.builder()
-                .price(giftCertificate.getPrice())
+                .price(sum)
                 .user(user)
-                .giftCertificate(giftCertificate)
+                .giftCertificates(giftCertificates)
                 .build();
         OrderDto dto = orderMapper.toDto(orderRepository.save(order));
         log.info("makeAnOrder {}", dto);

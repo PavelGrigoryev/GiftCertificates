@@ -149,6 +149,19 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     /**
+     * Finds All {@link GiftCertificate} by its ids.
+     *
+     * @param ids the List of ids.
+     * @return List of GiftCertificates.
+     */
+    @Override
+    public List<GiftCertificate> findAllByIdIn(List<Long> ids) {
+        List<GiftCertificate> allByIdIn = giftCertificateRepository.findAllByIdIn(ids);
+        log.info("findAllByIdIn {}", allByIdIn);
+        return allByIdIn;
+    }
+
+    /**
      * Create {@link GiftCertificate} for update in database. Check price and duration fields for null, if they null
      * - sets old fields from GiftCertificate that was found by ID.
      *

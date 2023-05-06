@@ -1,5 +1,6 @@
 package ru.clevertec.ecl.giftcertificates.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -8,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,6 +24,8 @@ import ru.clevertec.ecl.giftcertificates.model.listener.OrderTimeListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -48,10 +53,15 @@ public class Order {
     @ToString.Exclude
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gift_certificate_id")
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "orders_gift_certificate",
+            joinColumns = @JoinColumn(name = "orders_id"),
+            inverseJoinColumns = @JoinColumn(name = "gift_certificate_id")
+    )
+    @Builder.Default
     @ToString.Exclude
-    private GiftCertificate giftCertificate;
+    private List<GiftCertificate> giftCertificates = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

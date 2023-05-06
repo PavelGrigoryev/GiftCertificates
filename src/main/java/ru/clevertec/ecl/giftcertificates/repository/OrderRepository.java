@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    @EntityGraph(attributePaths = {"giftCertificate.tags"})
+    @EntityGraph(attributePaths = {"giftCertificates"})
     List<Order> findAllByUserId(Long id, Pageable pageable);
 
 }

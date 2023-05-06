@@ -3,8 +3,11 @@ POST http://localhost:8080/orders
 Content-Type: application/json
 
 {
-  "user_id": 1,
-  "gift_id": 2
+  "user_id": 2,
+  "gift_ids": [
+    1,
+    2
+  ]
 }
 
 ###findAllByUserId

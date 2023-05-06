@@ -14,12 +14,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @NonNull
     @Override
-    @EntityGraph(attributePaths = {"orders.giftCertificate"})
+    @EntityGraph(attributePaths = {"orders.giftCertificates"})
     Optional<User> findById(@NonNull Long id);
 
     @NonNull
     @Override
-    @EntityGraph(attributePaths = {"orders.giftCertificate"})
+    @EntityGraph(attributePaths = {"orders.giftCertificates"})
     List<User> findAll();
 
 }

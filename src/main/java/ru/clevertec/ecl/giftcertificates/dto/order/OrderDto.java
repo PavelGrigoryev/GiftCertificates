@@ -7,6 +7,7 @@ import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResp
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @JsonPropertyOrder({
         "id",
@@ -21,6 +22,6 @@ public record OrderDto(Long id,
                        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
                        LocalDateTime purchaseTime,
 
-                       @JsonProperty("gift_certificate")
-                       GiftCertificateResponse giftCertificate) {
+                       @JsonProperty("gift_certificates")
+                       List<GiftCertificateResponse> giftCertificates) {
 }

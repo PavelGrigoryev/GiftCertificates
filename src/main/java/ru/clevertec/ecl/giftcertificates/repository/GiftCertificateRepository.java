@@ -64,4 +64,12 @@ public interface GiftCertificateRepository extends JpaRepository<GiftCertificate
             """)
     List<GiftCertificate> findAllWithTags(String part, Sort sort);
 
+    /**
+     * Finds All {@link GiftCertificate} by its ids.
+     *
+     * @param ids the List of ids.
+     * @return List of GiftCertificates.
+     */
+    List<GiftCertificate> findAllByIdIn(List<Long> ids);
+
 }
