@@ -3,5 +3,5 @@ GET http://localhost:8080/users/3
 Accept: application/json
 
 ###findAll
-GET http://localhost:8080/users
+GET http://localhost:8080/users?page=0&size=3&sortBy=orders
 Accept: application/json

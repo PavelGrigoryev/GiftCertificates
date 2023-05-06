@@ -1,6 +1,6 @@
 package ru.clevertec.ecl.giftcertificates.service;
 
-import ru.clevertec.ecl.giftcertificates.dto.PaginationRequest;
+import ru.clevertec.ecl.giftcertificates.dto.pagination.OrderPageRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.MakeAnOrderRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.OrderDto;
 
@@ -10,6 +10,6 @@ public interface OrderService {
 
     OrderDto makeAnOrder(MakeAnOrderRequest request);
 
-    List<OrderDto> findAllByUserId(Long id, PaginationRequest request);
+    List<OrderDto> findAllByUserId(Long id, OrderPageRequest request);
 
 }

@@ -1,5 +1,6 @@
 package ru.clevertec.ecl.giftcertificates.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.clevertec.ecl.giftcertificates.dto.PaginationRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.MakeAnOrderRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.OrderDto;
+import ru.clevertec.ecl.giftcertificates.dto.pagination.OrderPageRequest;
 import ru.clevertec.ecl.giftcertificates.service.OrderService;
 
 import java.util.List;
@@ -29,8 +30,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<OrderDto>> findAllByUserId(@PathVariable Long id,
-                                                          PaginationRequest request) {
+    public ResponseEntity<List<OrderDto>> findAllByUserId(@PathVariable Long id, @Valid OrderPageRequest request) {
         return ResponseEntity.ok(orderService.findAllByUserId(id, request));
     }
 

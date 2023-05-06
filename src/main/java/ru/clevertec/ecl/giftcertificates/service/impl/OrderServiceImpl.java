@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.clevertec.ecl.giftcertificates.dto.PaginationRequest;
+import ru.clevertec.ecl.giftcertificates.dto.pagination.OrderPageRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.MakeAnOrderRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.OrderDto;
 import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findAllByUserId(Long id, PaginationRequest request) {
+    public List<OrderDto> findAllByUserId(Long id, OrderPageRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize(), Sort.by(request.getSortBy()));
         List<OrderDto> orders = orderRepository.findAllByUserId(id, pageRequest).stream()
                 .map(orderMapper::toDto)
