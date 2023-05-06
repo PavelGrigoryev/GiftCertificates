@@ -1,5 +1,6 @@
 package ru.clevertec.ecl.giftcertificates.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.ecl.giftcertificates.dto.UserDto;
+import ru.clevertec.ecl.giftcertificates.dto.pagination.UserPageRequest;
 import ru.clevertec.ecl.giftcertificates.service.UserService;
 
 import java.util.List;
@@ -24,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<List<UserDto>> findAll(@Valid UserPageRequest request) {
+        return ResponseEntity.ok(userService.findAll(request));
     }
 
 }

@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderDto> findAllByUserId(Long id, OrderPageRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize(), Sort.by(request.getSortBy()));
         List<OrderDto> orders = orderRepository.findAllByUserId(id, pageRequest).stream()

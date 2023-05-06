@@ -8,5 +8,5 @@ Content-Type: application/json
 }
 
 ###findAllByUserId
-GET http://localhost:8080/orders/1?page=0&size=2&sortBy=price
+GET http://localhost:8080/orders/1?page=0&size=10&sortBy=price
 Accept: application/json
