@@ -3,7 +3,7 @@ GET http://localhost:8080/tags/2
 Accept: application/json
 
 ###findAll
-GET http://localhost:8080/tags
+GET http://localhost:8080/tags?page=0&size=10&sortBy=id
 Accept: application/json
 
 ###save

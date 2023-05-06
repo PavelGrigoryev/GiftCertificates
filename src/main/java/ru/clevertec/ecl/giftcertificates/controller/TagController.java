@@ -1,5 +1,6 @@
 package ru.clevertec.ecl.giftcertificates.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.ecl.giftcertificates.dto.DeleteResponse;
 import ru.clevertec.ecl.giftcertificates.dto.TagDto;
+import ru.clevertec.ecl.giftcertificates.dto.pagination.TagPageRequest;
 import ru.clevertec.ecl.giftcertificates.service.TagService;
 
 import java.util.List;
@@ -30,8 +32,8 @@ public class TagController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TagDto>> findAll() {
-        return ResponseEntity.ok(tagService.findAll());
+    public ResponseEntity<List<TagDto>> findAll(@Valid TagPageRequest request) {
+        return ResponseEntity.ok(tagService.findAll(request));
     }
 
     @PostMapping

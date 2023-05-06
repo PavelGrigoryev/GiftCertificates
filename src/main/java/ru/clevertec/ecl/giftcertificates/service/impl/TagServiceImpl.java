@@ -3,9 +3,12 @@ package ru.clevertec.ecl.giftcertificates.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.giftcertificates.dto.TagDto;
+import ru.clevertec.ecl.giftcertificates.dto.pagination.TagPageRequest;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchTagException;
 import ru.clevertec.ecl.giftcertificates.exception.NoTagWithTheSameNameException;
 import ru.clevertec.ecl.giftcertificates.mapper.TagMapper;
@@ -13,7 +16,6 @@ import ru.clevertec.ecl.giftcertificates.model.Tag;
 import ru.clevertec.ecl.giftcertificates.repository.TagRepository;
 import ru.clevertec.ecl.giftcertificates.service.TagService;
 
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -51,14 +53,15 @@ public class TagServiceImpl implements TagService {
     /**
      * Finds all {@link TagDto}.
      *
-     * @return a sorted by id and mapped from entity to dto list of all TagDto.
+     * @param request the {@link TagPageRequest} tags will be sorted by its parameters and divided into pages.
+     * @return a sorted by pageable and mapped from entity to dto list of all TagDto.
      */
     @Override
     @Transactional(readOnly = true)
-    public List<TagDto> findAll() {
-        List<TagDto> tags = tagRepository.findAll()
+    public List<TagDto> findAll(TagPageRequest request) {
+        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize(), Sort.by(request.getSortBy()));
+        List<TagDto> tags = tagRepository.findAll(pageRequest)
                 .stream()
-                .sorted(Comparator.comparing(Tag::getId))
                 .map(tagMapper::toDto)
                 .toList();
         log.info("findAll {} Tags size", tags.size());

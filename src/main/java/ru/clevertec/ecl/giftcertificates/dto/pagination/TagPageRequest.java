@@ -11,10 +11,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class OrderPageRequest extends AbstractPageRequest {
+public class TagPageRequest extends AbstractPageRequest {
 
     @NotBlank(message = "SortBy cannot be null")
-    @Pattern(regexp = "^(id|price|purchaseTime)$", message = "Acceptable values are only: id, price, purchaseTime")
+    @Pattern(regexp = "^(id|name)$", message = "Acceptable values are only: id or name")
     private String sortBy;
 
 }
