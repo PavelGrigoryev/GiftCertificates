@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.giftcertificates.dto.UserDto;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchUserException;
 import ru.clevertec.ecl.giftcertificates.mapper.UserMapper;
+import ru.clevertec.ecl.giftcertificates.model.User;
 import ru.clevertec.ecl.giftcertificates.repository.UserRepository;
 import ru.clevertec.ecl.giftcertificates.service.UserService;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAll() {
         List<UserDto> users = userRepository.findAll().stream()
+                .sorted(Comparator.comparing(User::getId))
                 .map(userMapper::toDto)
                 .toList();
         log.info("findAll {} User size", users.size());

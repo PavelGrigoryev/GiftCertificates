@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.ecl.giftcertificates.dto.DeleteResponse;
-import ru.clevertec.ecl.giftcertificates.dto.PriceDurationUpdateRequest;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdateRequest;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequest;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 
 import java.util.List;

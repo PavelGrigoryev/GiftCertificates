@@ -1,4 +1,6 @@
-package ru.clevertec.ecl.giftcertificates.dto;
+package ru.clevertec.ecl.giftcertificates.dto.giftcertificate;
+
+import ru.clevertec.ecl.giftcertificates.dto.TagDto;
 
 import java.math.BigDecimal;
 import java.util.List;

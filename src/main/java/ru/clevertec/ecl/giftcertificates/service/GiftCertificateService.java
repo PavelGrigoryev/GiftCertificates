@@ -1,8 +1,8 @@
 package ru.clevertec.ecl.giftcertificates.service;
 
-import ru.clevertec.ecl.giftcertificates.dto.PriceDurationUpdateRequest;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdateRequest;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequest;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
 
 import java.util.List;
 

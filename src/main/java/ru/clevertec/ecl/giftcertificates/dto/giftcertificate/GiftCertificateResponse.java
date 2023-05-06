@@ -1,8 +1,9 @@
-package ru.clevertec.ecl.giftcertificates.dto;
+package ru.clevertec.ecl.giftcertificates.dto.giftcertificate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import ru.clevertec.ecl.giftcertificates.dto.TagDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

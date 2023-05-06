@@ -2,8 +2,8 @@ package ru.clevertec.ecl.giftcertificates.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequest;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 
 @Mapper(componentModel = "spring", uses = TagMapper.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)

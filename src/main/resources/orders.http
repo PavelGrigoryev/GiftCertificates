@@ -1,3 +1,12 @@
 ###makeAnOrder
-GET http://localhost:8080/orders?userId=3&giftId=2
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "gift_id": 2
+}
+
+###findAllByUserId
+GET http://localhost:8080/orders/1?page=0&size=2&sortBy=price
 Accept: application/json
