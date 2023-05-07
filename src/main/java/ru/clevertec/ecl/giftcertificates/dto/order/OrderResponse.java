@@ -22,6 +22,10 @@ public record OrderResponse(Long id,
                             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
                             LocalDateTime purchaseTime,
 
+                            @JsonProperty("last_addition_time")
+                            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+                            LocalDateTime lastAdditionTime,
+
                             @JsonProperty("gift_certificates")
                             List<GiftCertificateResponse> giftCertificates) {
 }

@@ -30,10 +30,11 @@ CREATE TABLE IF NOT EXISTS users
 
 CREATE TABLE IF NOT EXISTS orders
 (
-    id            BIGSERIAL PRIMARY KEY,
-    price         DECIMAL   NOT NULL,
-    purchase_time TIMESTAMP NOT NULL,
-    user_id       BIGINT REFERENCES users (id)
+    id                 BIGSERIAL PRIMARY KEY,
+    price              DECIMAL   NOT NULL,
+    purchase_time      TIMESTAMP NOT NULL,
+    last_addition_time TIMESTAMP NOT NULL,
+    user_id            BIGINT REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS orders_gift_certificate

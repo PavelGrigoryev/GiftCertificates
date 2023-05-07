@@ -26,3 +26,7 @@ Content-Type: application/json
 ###delete
 DELETE http://localhost:8080/tags/3
 Content-Type: application/json
+
+###findTheMostWidelyUsedWithTheHighestCost
+GET http://localhost:8080/tags/user/3
+Accept: application/json

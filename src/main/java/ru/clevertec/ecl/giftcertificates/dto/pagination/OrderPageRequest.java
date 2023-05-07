@@ -14,7 +14,8 @@ import lombok.Setter;
 public class OrderPageRequest extends AbstractPageRequest {
 
     @NotBlank(message = "SortBy cannot be null")
-    @Pattern(regexp = "^(id|price|purchaseTime)$", message = "Acceptable values are only: id, price, purchaseTime")
+    @Pattern(regexp = "^(id|price|purchaseTime|lastAdditionTime)$",
+            message = "Acceptable values are only: id, price, purchaseTime, lastAdditionTime")
     private String sortBy;
 
 }

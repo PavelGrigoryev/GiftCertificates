@@ -48,6 +48,9 @@ public class Order {
     @Column(name = "purchase_time")
     private LocalDateTime purchaseTime;
 
+    @Column(name = "last_addition_time")
+    private LocalDateTime lastAdditionTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @ToString.Exclude

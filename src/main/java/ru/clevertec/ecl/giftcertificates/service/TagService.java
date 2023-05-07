@@ -20,4 +20,6 @@ public interface TagService {
 
     List<Tag> findByNameIn(List<String> names);
 
+    TagDto findTheMostWidelyUsedWithTheHighestCost(Long userId);
+
 }

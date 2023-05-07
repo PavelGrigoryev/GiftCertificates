@@ -51,7 +51,7 @@ public class TagServiceImpl implements TagService {
     }
 
     /**
-     * Finds all {@link TagDto}.
+     * Finds all {@link TagDto} with pagination.
      *
      * @param request the {@link TagPageRequest} tags will be sorted by its parameters and divided into pages.
      * @return a sorted by pageable and mapped from entity to dto list of all TagDto.
@@ -143,6 +143,22 @@ public class TagServiceImpl implements TagService {
         List<Tag> byNameIn = tagRepository.findByNameIn(names);
         log.info("findByNameIn {} Tags size", byNameIn.size());
         return byNameIn;
+    }
+
+    /**
+     * Get the most widely used {@link Tag} of a {@link ru.clevertec.ecl.giftcertificates.model.User} with the highest
+     * cost of all orders.
+     *
+     * @param userId the ID of the User.
+     * @return the {@link TagDto} which was mapped from Tag entity.
+     */
+    @Override
+    public TagDto findTheMostWidelyUsedWithTheHighestCost(Long userId) {
+        TagDto tagDto = tagRepository.findTheMostWidelyUsedWithTheHighestCost(userId)
+                .map(tagMapper::toDto)
+                .orElseThrow(() -> new NoSuchTagException("There is no Tags in database"));
+        log.info("findTheMostWidelyUsedWithTheHighestCost {}", tagDto);
+        return tagDto;
     }
 
 }

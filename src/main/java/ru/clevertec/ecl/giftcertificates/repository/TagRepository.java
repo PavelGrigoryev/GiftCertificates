@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The TagRepository class implements the {@link JpaRepository} interface and provides the implementation
@@ -43,5 +44,26 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     @Modifying
     @Query("DELETE FROM Tag WHERE id = :id")
     void deleteById(@NonNull Long id);
+
+    /**
+     * Get the most widely used {@link Tag} of a {@link ru.clevertec.ecl.giftcertificates.model.User} with the highest
+     * cost of all orders.
+     *
+     * @param userId the ID of the User.
+     * @return an {@link Optional} containing the Tag or an empty Optional if entity is not found in the database.
+     */
+    @Query(value = """
+            SELECT t.* FROM tag t
+            JOIN gift_certificate_tag gct ON t.id = gct.tag_id
+            JOIN gift_certificate gc ON gct.gift_certificate_id = gc.id
+            JOIN orders_gift_certificate ogc ON gc.id = ogc.gift_certificate_id
+            JOIN orders o ON ogc.orders_id = o.id
+            JOIN users u ON o.user_id = u.id
+            WHERE u.id = :userId
+            GROUP BY t.id
+            ORDER BY SUM(o.price) DESC
+            LIMIT 1
+            """, nativeQuery = true)
+    Optional<Tag> findTheMostWidelyUsedWithTheHighestCost(Long userId);
 
 }

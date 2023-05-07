@@ -52,4 +52,9 @@ public class TagController {
         return ResponseEntity.ok(new DeleteResponse("Tag with ID " + id + " was successfully deleted"));
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<TagDto> findTheMostWidelyUsedWithTheHighestCost(@PathVariable Long userId) {
+        return ResponseEntity.ok(tagService.findTheMostWidelyUsedWithTheHighestCost(userId));
+    }
+
 }
