@@ -1,10 +1,10 @@
 package ru.clevertec.ecl.giftcertificates.dto;
 
-import ru.clevertec.ecl.giftcertificates.dto.order.OrderDto;
+import ru.clevertec.ecl.giftcertificates.dto.order.OrderResponse;
 
 import java.util.List;
 
 public record UserDto(Long id,
                       String username,
-                      List<OrderDto> orders) {
+                      List<OrderResponse> orders) {
 }

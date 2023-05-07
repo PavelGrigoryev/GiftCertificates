@@ -15,13 +15,13 @@ import java.util.List;
         "purchase_time",
         "gift_certificate"
 })
-public record OrderDto(Long id,
-                       BigDecimal price,
+public record OrderResponse(Long id,
+                            BigDecimal price,
 
-                       @JsonProperty("purchase_time")
-                       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
-                       LocalDateTime purchaseTime,
+                            @JsonProperty("purchase_time")
+                            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+                            LocalDateTime purchaseTime,
 
-                       @JsonProperty("gift_certificates")
-                       List<GiftCertificateResponse> giftCertificates) {
+                            @JsonProperty("gift_certificates")
+                            List<GiftCertificateResponse> giftCertificates) {
 }

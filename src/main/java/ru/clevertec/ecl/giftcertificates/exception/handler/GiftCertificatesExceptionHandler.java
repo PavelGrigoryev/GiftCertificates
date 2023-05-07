@@ -30,7 +30,8 @@ public class GiftCertificatesExceptionHandler {
      */
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<IncorrectData> serviceException(NotFoundException exception) {
-        IncorrectData incorrectData = new IncorrectData(exception.getMessage(), HttpStatus.NOT_FOUND.toString());
+        IncorrectData incorrectData = new IncorrectData(
+                exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_FOUND.toString());
         log.error(incorrectData.toString());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(incorrectData);
     }
@@ -43,7 +44,8 @@ public class GiftCertificatesExceptionHandler {
      */
     @ExceptionHandler(NoTagWithTheSameNameException.class)
     public ResponseEntity<IncorrectData> noTagWithTheSameNameException(NoTagWithTheSameNameException exception) {
-        IncorrectData incorrectData = new IncorrectData(exception.getMessage(), HttpStatus.NOT_ACCEPTABLE.toString());
+        IncorrectData incorrectData = new IncorrectData(
+                exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_ACCEPTABLE.toString());
         log.error(incorrectData.toString());
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(incorrectData);
     }
