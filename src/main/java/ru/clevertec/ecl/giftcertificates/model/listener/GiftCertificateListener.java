@@ -6,10 +6,11 @@ import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 
 import java.time.LocalDateTime;
 
-public class GiftCertificateTimeListener {
+public class GiftCertificateListener {
 
     @PrePersist
     public void prePersist(GiftCertificate giftCertificate) {
+        giftCertificate.setOperation("INSERT");
         LocalDateTime now = LocalDateTime.now();
         giftCertificate.setCreateDate(now);
         giftCertificate.setLastUpdateDate(now);
@@ -17,6 +18,7 @@ public class GiftCertificateTimeListener {
 
     @PreUpdate
     public void preUpdate(GiftCertificate giftCertificate) {
+        giftCertificate.setOperation("UPDATE");
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
     }
 

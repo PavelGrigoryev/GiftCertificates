@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import ru.clevertec.ecl.giftcertificates.model.listener.GiftCertificateTimeListener;
+import ru.clevertec.ecl.giftcertificates.model.audit.Audit;
+import ru.clevertec.ecl.giftcertificates.model.listener.GiftCertificateListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -34,8 +35,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "gift_certificate")
-@EntityListeners(GiftCertificateTimeListener.class)
-public class GiftCertificate {
+@EntityListeners(GiftCertificateListener.class)
+public class GiftCertificate extends Audit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

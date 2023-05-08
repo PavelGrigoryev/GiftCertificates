@@ -6,10 +6,11 @@ import ru.clevertec.ecl.giftcertificates.model.Order;
 
 import java.time.LocalDateTime;
 
-public class OrderTimeListener {
+public class OrderListener {
 
     @PrePersist
     public void prePersist(Order order) {
+        order.setOperation("INSERT");
         LocalDateTime now = LocalDateTime.now();
         order.setPurchaseTime(now);
         order.setLastAdditionTime(now);
@@ -17,6 +18,7 @@ public class OrderTimeListener {
 
     @PreUpdate
     public void preUpdate(Order order) {
+        order.setOperation("UPDATE");
         order.setLastAdditionTime(LocalDateTime.now());
     }
 

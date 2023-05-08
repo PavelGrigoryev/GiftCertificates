@@ -20,7 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import ru.clevertec.ecl.giftcertificates.model.listener.OrderTimeListener;
+import ru.clevertec.ecl.giftcertificates.model.audit.Audit;
+import ru.clevertec.ecl.giftcertificates.model.listener.OrderListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -36,8 +37,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "orders")
-@EntityListeners(OrderTimeListener.class)
-public class Order {
+@EntityListeners(OrderListener.class)
+public class Order extends Audit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

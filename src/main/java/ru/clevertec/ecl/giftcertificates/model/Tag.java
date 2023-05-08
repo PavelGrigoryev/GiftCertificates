@@ -2,6 +2,7 @@ package ru.clevertec.ecl.giftcertificates.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import ru.clevertec.ecl.giftcertificates.model.audit.Audit;
+import ru.clevertec.ecl.giftcertificates.model.listener.TagListener;
 
 import java.util.Objects;
 
@@ -22,7 +25,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Tag {
+@EntityListeners(TagListener.class)
+public class Tag extends Audit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
