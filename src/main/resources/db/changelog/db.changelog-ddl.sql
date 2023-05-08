@@ -1,3 +1,6 @@
+--liquibase formatted sql
+
+--changeset Grigoryev_Pavel:1
 CREATE TABLE IF NOT EXISTS gift_certificate
 (
     id               BIGSERIAL PRIMARY KEY,
@@ -22,6 +25,7 @@ CREATE TABLE IF NOT EXISTS gift_certificate_tag
     PRIMARY KEY (gift_certificate_id, tag_id)
 );
 
+--changeset Grigoryev_Pavel:2
 CREATE TABLE IF NOT EXISTS users
 (
     id       BIGSERIAL PRIMARY KEY,
