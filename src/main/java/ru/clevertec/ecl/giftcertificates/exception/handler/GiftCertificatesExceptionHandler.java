@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.clevertec.ecl.giftcertificates.exception.AlreadyHaveThisCertificateException;
 import ru.clevertec.ecl.giftcertificates.exception.NoTagWithTheSameNameException;
 import ru.clevertec.ecl.giftcertificates.exception.NotFoundException;
 import ru.clevertec.ecl.giftcertificates.exception.model.IncorrectData;
@@ -50,6 +51,19 @@ public class GiftCertificatesExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(incorrectData);
     }
 
+    /**
+     * Handles {@link AlreadyHaveThisCertificateException} and returns a 406 Not Acceptable response with an error message.
+     *
+     * @param exception The AlreadyHaveThisCertificateException to handle.
+     * @return A ResponseEntity containing an {@link IncorrectData} object and a 406 status code.
+     */
+    @ExceptionHandler(AlreadyHaveThisCertificateException.class)
+    public ResponseEntity<IncorrectData> alreadyHaveThisCertificateException(AlreadyHaveThisCertificateException exception) {
+        IncorrectData incorrectData = new IncorrectData(
+                exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_ACCEPTABLE.toString());
+        log.error(incorrectData.toString());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(incorrectData);
+    }
 
     /**
      * Handles {@link ConstraintViolationException} and returns a 409 Conflict response with an error message.

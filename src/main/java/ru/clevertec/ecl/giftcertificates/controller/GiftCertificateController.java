@@ -18,21 +18,24 @@ import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequ
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
+import ru.clevertec.ecl.giftcertificates.swagger.GiftCertificateSwagger;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/gift-certificates")
-public class GiftCertificateController {
+public class GiftCertificateController implements GiftCertificateSwagger {
 
     private final GiftCertificateService giftCertificateService;
 
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<GiftCertificateResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<List<GiftCertificateResponse>> findAllWithTags(@RequestParam(required = false) String tagName,
                                                                          @RequestParam(required = false) String part,
@@ -41,16 +44,19 @@ public class GiftCertificateController {
         return ResponseEntity.ok(giftCertificateService.findAllWithTags(tagName, part, sortBy, order));
     }
 
+    @Override
     @PostMapping
     public ResponseEntity<GiftCertificateResponse> save(@RequestBody @Valid GiftCertificateRequest giftCertificateRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(giftCertificateService.save(giftCertificateRequest));
     }
 
+    @Override
     @PutMapping
     public ResponseEntity<GiftCertificateResponse> update(@RequestBody @Valid PriceDurationUpdateRequest request) {
         return ResponseEntity.ok(giftCertificateService.update(request));
     }
 
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteResponse> delete(@PathVariable Long id) {
         giftCertificateService.delete(id);

@@ -19,31 +19,36 @@ import ru.clevertec.ecl.giftcertificates.dto.order.OrderResponse;
 import ru.clevertec.ecl.giftcertificates.dto.order.UpdateYourOrderRequest;
 import ru.clevertec.ecl.giftcertificates.dto.pagination.OrderPageRequest;
 import ru.clevertec.ecl.giftcertificates.service.OrderService;
+import ru.clevertec.ecl.giftcertificates.swagger.OrderSwagger;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
-public class OrderController {
+public class OrderController implements OrderSwagger {
 
     private final OrderService orderService;
 
+    @Override
     @PostMapping
     public ResponseEntity<OrderResponse> makeAnOrder(@RequestBody @Valid MakeAnOrderRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.makeAnOrder(request));
     }
 
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<List<OrderResponse>> findAllYourOrders(@PathVariable Long id, @Valid OrderPageRequest request) {
         return ResponseEntity.ok(orderService.findAllByUserId(id, request));
     }
 
+    @Override
     @PutMapping
     public ResponseEntity<OrderResponse> addToYourOrder(@RequestBody @Valid UpdateYourOrderRequest request) {
         return ResponseEntity.ok(orderService.addToYourOrder(request));
     }
 
+    @Override
     @DeleteMapping
     public ResponseEntity<DeleteResponse> deleteYourOrder(@RequestParam Long userId, Long orderId) {
         orderService.delete(userId, orderId);

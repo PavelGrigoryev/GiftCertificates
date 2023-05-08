@@ -94,8 +94,7 @@ public class TagServiceImpl implements TagService {
      *
      * @param tagDto the {@link TagDto} which will be mapped to Tag and updated in database by repository.
      * @return the updated TagDto which was mapped from Tag entity, if name is same - returns same TagDto without update.
-     * @throws NoSuchTagException            if Tag is not exists by finding it by ID.
-     * @throws NoTagWithTheSameNameException if Tag is already exist with the same name.
+     * @throws NoSuchTagException if Tag is not exists by finding it by ID.
      */
     @Override
     public TagDto update(TagDto tagDto) {
@@ -106,12 +105,7 @@ public class TagServiceImpl implements TagService {
             log.info("no update {}", tagDto);
             return tagDto;
         }
-        Tag updated;
-        try {
-            updated = tagRepository.saveAndFlush(tag);
-        } catch (DataIntegrityViolationException e) {
-            throw new NoTagWithTheSameNameException("Tag name " + tag.getName() + " is already exist! It must be unique!");
-        }
+        Tag updated = tagRepository.saveAndFlush(tag);
         TagDto updatedDto = tagMapper.toDto(updated);
         log.info("update {}", updatedDto);
         return updatedDto;
