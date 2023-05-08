@@ -30,7 +30,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponse> makeAnOrder(@RequestBody MakeAnOrderRequest request) {
+    public ResponseEntity<OrderResponse> makeAnOrder(@RequestBody @Valid MakeAnOrderRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.makeAnOrder(request));
     }
 
@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @PutMapping
-    public ResponseEntity<OrderResponse> addToYourOrder(@RequestBody UpdateYourOrderRequest request) {
+    public ResponseEntity<OrderResponse> addToYourOrder(@RequestBody @Valid UpdateYourOrderRequest request) {
         return ResponseEntity.ok(orderService.addToYourOrder(request));
     }
 

@@ -1,5 +1,6 @@
 package ru.clevertec.ecl.giftcertificates.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.ecl.giftcertificates.dto.DeleteResponse;
-import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
 
 import java.util.List;
@@ -41,12 +42,12 @@ public class GiftCertificateController {
     }
 
     @PostMapping
-    public ResponseEntity<GiftCertificateResponse> save(@RequestBody GiftCertificateRequest giftCertificateRequest) {
+    public ResponseEntity<GiftCertificateResponse> save(@RequestBody @Valid GiftCertificateRequest giftCertificateRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(giftCertificateService.save(giftCertificateRequest));
     }
 
     @PutMapping
-    public ResponseEntity<GiftCertificateResponse> update(@RequestBody PriceDurationUpdateRequest request) {
+    public ResponseEntity<GiftCertificateResponse> update(@RequestBody @Valid PriceDurationUpdateRequest request) {
         return ResponseEntity.ok(giftCertificateService.update(request));
     }
 

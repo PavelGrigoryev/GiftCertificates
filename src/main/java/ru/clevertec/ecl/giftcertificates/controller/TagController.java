@@ -37,12 +37,12 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<TagDto> save(@RequestBody TagDto tagDto) {
+    public ResponseEntity<TagDto> save(@RequestBody @Valid TagDto tagDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tagService.save(tagDto));
     }
 
     @PutMapping
-    public ResponseEntity<TagDto> update(@RequestBody TagDto tagDto) {
+    public ResponseEntity<TagDto> update(@RequestBody @Valid TagDto tagDto) {
         return ResponseEntity.ok(tagService.update(tagDto));
     }
 

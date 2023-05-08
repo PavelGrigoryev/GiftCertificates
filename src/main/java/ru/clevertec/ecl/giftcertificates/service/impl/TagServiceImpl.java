@@ -156,7 +156,7 @@ public class TagServiceImpl implements TagService {
     public TagDto findTheMostWidelyUsedWithTheHighestCost(Long userId) {
         TagDto tagDto = tagRepository.findTheMostWidelyUsedWithTheHighestCost(userId)
                 .map(tagMapper::toDto)
-                .orElseThrow(() -> new NoSuchTagException("There is no Tags in database"));
+                .orElseThrow(() -> new NoSuchTagException("There is no Tags in database with User ID " + userId + " connection"));
         log.info("findTheMostWidelyUsedWithTheHighestCost {}", tagDto);
         return tagDto;
     }
