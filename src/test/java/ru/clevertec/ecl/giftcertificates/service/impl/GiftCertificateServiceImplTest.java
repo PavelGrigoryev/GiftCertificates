@@ -1,5 +1,7 @@
 package ru.clevertec.ecl.giftcertificates.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -8,19 +10,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.clevertec.ecl.giftcertificates.dao.GiftCertificateDao;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateRequest;
-import ru.clevertec.ecl.giftcertificates.dto.GiftCertificateResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequest;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
+import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchGiftCertificateException;
+import ru.clevertec.ecl.giftcertificates.exception.NoTagWithTheSameNameException;
 import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
+import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapperImpl;
+import ru.clevertec.ecl.giftcertificates.mapper.TagMapperImpl;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
+import ru.clevertec.ecl.giftcertificates.model.Tag;
+import ru.clevertec.ecl.giftcertificates.repository.GiftCertificateRepository;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
+import ru.clevertec.ecl.giftcertificates.service.TagService;
 import ru.clevertec.ecl.giftcertificates.util.impl.GiftCertificateTestBuilder;
 import ru.clevertec.ecl.giftcertificates.util.impl.TagTestBuilder;
 
@@ -32,97 +41,54 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@SpringBootTest(classes = {GiftCertificateMapperImpl.class, TagMapperImpl.class})
 @ExtendWith(MockitoExtension.class)
 class GiftCertificateServiceImplTest {
 
-    @Spy
     private GiftCertificateService giftCertificateService;
     @Mock
-    private GiftCertificateDao giftCertificateDao;
-    private final GiftCertificateMapper giftCertificateMapper = Mappers.getMapper(GiftCertificateMapper.class);
+    private TagService tagService;
+    @Mock
+    private GiftCertificateRepository giftCertificateRepository;
+    @Mock
+    private EntityManager entityManager;
+    @Autowired
+    private GiftCertificateMapper giftCertificateMapper;
     private static final GiftCertificateTestBuilder TEST_BUILDER = GiftCertificateTestBuilder.aGiftCertificate();
     @Captor
     private ArgumentCaptor<GiftCertificate> captor;
 
     @BeforeEach
     void setUp() {
-        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateDao);
-    }
-
-    @Nested
-    class FindAllTest {
-
-        @Test
-        @DisplayName("test findAll should return List of size 1")
-        void testFindAllShouldReturnListOfSizeOne() {
-            GiftCertificate mockedGiftCertificate = TEST_BUILDER.build();
-            int expectedSize = 1;
-
-            doReturn(List.of(mockedGiftCertificate))
-                    .when(giftCertificateDao)
-                    .findAll();
-
-            List<GiftCertificateResponse> actualValues = giftCertificateService.findAll();
-            assertThat(actualValues).hasSize(expectedSize);
-        }
-
-        @Test
-        @DisplayName("test findAll should return sorted by id List of GiftCertificateResponse")
-        void testFindAllShouldReturnSortedByIdListOfGiftCertificateResponse() {
-            GiftCertificate firstMock = TEST_BUILDER.build();
-            GiftCertificate secondMock = TEST_BUILDER.withId(2L).build();
-            GiftCertificate thirdMock = TEST_BUILDER.withId(3L).build();
-            List<GiftCertificate> mockedGiftCertificates = List.of(secondMock, thirdMock, firstMock);
-            List<GiftCertificateResponse> expectedValues = Stream.of(firstMock, secondMock, thirdMock)
-                    .map(giftCertificateMapper::toResponse)
-                    .toList();
-
-            doReturn(mockedGiftCertificates)
-                    .when(giftCertificateDao)
-                    .findAll();
-
-            List<GiftCertificateResponse> actualValues = giftCertificateService.findAll();
-
-            assertThat(actualValues).isEqualTo(expectedValues);
-        }
-
-        @Test
-        @DisplayName("test findAll should return empty List")
-        void testFindAllShouldReturnEmptyList() {
-            doReturn(Collections.emptyList())
-                    .when(giftCertificateDao)
-                    .findAll();
-
-            List<GiftCertificateResponse> actualValues = giftCertificateService.findAll();
-
-            assertThat(actualValues).isEmpty();
-        }
-
+        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateRepository, tagService,
+                giftCertificateMapper, entityManager);
     }
 
     @Nested
     class FindByIdTest {
 
         @Test
-        @DisplayName("test findById throw NoSuchGiftCertificateException")
-        void testFindByIdThrowNoSuchGiftCertificateException() {
+        @DisplayName("test throw NoSuchGiftCertificateException")
+        void testThrowNoSuchGiftCertificateException() {
             long id = 2L;
 
             doThrow(new NoSuchGiftCertificateException(""))
-                    .when(giftCertificateDao)
+                    .when(giftCertificateRepository)
                     .findById(id);
 
             assertThrows(NoSuchGiftCertificateException.class, () -> giftCertificateService.findById(id));
         }
 
         @Test
-        @DisplayName("test findById throw NoSuchGiftCertificateException with expected message")
-        void testFindByIdThrowNoSuchGiftCertificateExceptionWithExpectedMessage() {
+        @DisplayName("test throw NoSuchGiftCertificateException with expected message")
+        void testThrowNoSuchGiftCertificateExceptionWithExpectedMessage() {
             long id = 1L;
             String expectedMessage = "GiftCertificate with ID " + id + " does not exist";
 
@@ -134,14 +100,14 @@ class GiftCertificateServiceImplTest {
         }
 
         @Test
-        @DisplayName("test testFindById should return expected GiftCertificateResponse")
-        void testFindByIdShouldReturnExpectedTagDto() {
+        @DisplayName("test should return expected GiftCertificateResponse")
+        void testShouldReturnExpectedTagDto() {
             GiftCertificate mockedGiftCertificate = TEST_BUILDER.build();
             long id = mockedGiftCertificate.getId();
             GiftCertificateResponse expectedValue = giftCertificateMapper.toResponse(mockedGiftCertificate);
 
             doReturn(Optional.of(mockedGiftCertificate))
-                    .when(giftCertificateDao)
+                    .when(giftCertificateRepository)
                     .findById(id);
 
             GiftCertificateResponse actualValue = giftCertificateService.findById(id);
@@ -155,16 +121,17 @@ class GiftCertificateServiceImplTest {
     class FindAllWithTagsTest {
 
         @Test
-        @DisplayName("test findAllWithTags should return List of size 1")
-        void testFindAllWithTagsShouldReturnListOfSizeOne() {
+        @DisplayName("test should return List of size 1")
+        void testShouldReturnListOfSizeOne() {
             GiftCertificate mockedGiftCertificate = TEST_BUILDER.build();
             int expectedSize = 1;
 
             doReturn(List.of(mockedGiftCertificate))
-                    .when(giftCertificateDao)
-                    .findAll();
+                    .when(giftCertificateRepository)
+                    .findAllWithTags("Pepsi", "Little", Sort.by("createDate").descending());
 
-            List<GiftCertificateResponse> actualValues = giftCertificateService.findAll();
+            List<GiftCertificateResponse> actualValues
+                    = giftCertificateService.findAllWithTags("Pepsi", "Little", "date", "desc");
             assertThat(actualValues).hasSize(expectedSize);
         }
 
@@ -182,8 +149,8 @@ class GiftCertificateServiceImplTest {
                     .toList();
 
             doReturn(mockedGiftCertificates)
-                    .when(giftCertificateDao)
-                    .findAllWithTags(null, null, null, null);
+                    .when(giftCertificateRepository)
+                    .findAllWithTags(null, Sort.by("id").ascending());
 
             List<GiftCertificateResponse> actualValues = giftCertificateService
                     .findAllWithTags(null, null, null, null);
@@ -195,8 +162,8 @@ class GiftCertificateServiceImplTest {
         @DisplayName("test findAllWithTags should return empty List")
         void testFindAllWithTagsShouldReturnEmptyList() {
             doReturn(Collections.emptyList())
-                    .when(giftCertificateDao)
-                    .findAllWithTags("", "", "", "");
+                    .when(giftCertificateRepository)
+                    .findAllWithTags("", "", Sort.by("name").ascending());
 
             List<GiftCertificateResponse> actualValues = giftCertificateService
                     .findAllWithTags("", "", "", "");
@@ -214,17 +181,58 @@ class GiftCertificateServiceImplTest {
         @MethodSource("ru.clevertec.ecl.giftcertificates.service.impl.GiftCertificateServiceImplTest#getArgumentsForSaveTest")
         void testSaveShouldCaptureValue(GiftCertificate expectedValue) {
             GiftCertificateRequest request = giftCertificateMapper.toRequest(expectedValue);
+            List<String> names = expectedValue.getTags().stream()
+                    .map(Tag::getName)
+                    .toList();
+
+            doReturn(expectedValue.getTags())
+                    .when(tagService)
+                    .findByNameIn(names);
+
             doReturn(expectedValue)
-                    .when(giftCertificateDao)
+                    .when(entityManager)
+                    .merge(any(GiftCertificate.class));
+
+            doReturn(expectedValue)
+                    .when(giftCertificateRepository)
                     .save(expectedValue);
 
             giftCertificateService.save(request);
-
-            verify(giftCertificateDao).save(captor.capture());
-
+            verify(giftCertificateRepository).save(captor.capture());
             GiftCertificate captorValue = captor.getValue();
 
             assertThat(captorValue).isEqualTo(expectedValue);
+        }
+
+        @Test
+        @DisplayName("test should throw NoTagWithTheSameNameException")
+        void testShouldThrowNoTagWithTheSameNameException() {
+            GiftCertificate mockedGiftCertificate = TEST_BUILDER.build();
+            GiftCertificateRequest mockedDto = giftCertificateMapper.toRequest(mockedGiftCertificate);
+
+            doThrow(new IllegalStateException(""))
+                    .when(entityManager)
+                    .merge(any(GiftCertificate.class));
+
+            assertThrows(NoTagWithTheSameNameException.class, () -> giftCertificateService.save(mockedDto));
+        }
+
+        @Test
+        @DisplayName("test should throw NoTagWithTheSameNameException with expected message")
+        void testShouldThrowNoTagWithTheSameNameExceptionWithExpectedMessage() {
+            GiftCertificate mockedGiftCertificate = TEST_BUILDER.build();
+            GiftCertificateRequest mockedDto = giftCertificateMapper.toRequest(mockedGiftCertificate);
+            String expectedMessage = "There should be no tags with the same name!";
+
+            doThrow(new PersistenceException(""))
+                    .when(entityManager)
+                    .merge(any(GiftCertificate.class));
+
+            Exception exception = assertThrows(NoTagWithTheSameNameException.class,
+                    () -> giftCertificateService.save(mockedDto));
+            String actualMessage = exception.getMessage();
+
+            assertThat(actualMessage).isEqualTo(expectedMessage);
         }
 
     }
@@ -233,50 +241,53 @@ class GiftCertificateServiceImplTest {
     class UpdateTest {
 
         @Test
-        @DisplayName("test update should return updated GiftCertificateResponse")
-        void testUpdateShouldReturnUpdatedGiftCertificateResponse() {
+        @DisplayName("test should return updated GiftCertificateResponse")
+        void testShouldReturnUpdatedGiftCertificateResponse() {
             GiftCertificate mockedGiftCertificate = TEST_BUILDER.build();
-            GiftCertificateRequest expectedValue = giftCertificateMapper.toRequest(mockedGiftCertificate);
+            PriceDurationUpdateRequest expectedValue = new PriceDurationUpdateRequest(1L, BigDecimal.ONE, 7);
             long id = mockedGiftCertificate.getId();
 
             doReturn(Optional.of(mockedGiftCertificate))
-                    .when(giftCertificateDao)
+                    .when(giftCertificateRepository)
                     .findById(id);
 
-            mockedGiftCertificate.setName("Destruction");
-            mockedGiftCertificate.setDescription("Oh No!!!");
+            mockedGiftCertificate.setPrice(expectedValue.price());
+            mockedGiftCertificate.setDuration(expectedValue.duration());
 
             doReturn(mockedGiftCertificate)
-                    .when(giftCertificateDao)
-                    .update(mockedGiftCertificate);
+                    .when(giftCertificateRepository)
+                    .saveAndFlush(mockedGiftCertificate);
 
             GiftCertificateResponse actualValue = giftCertificateService.update(expectedValue);
 
-            assertThat(actualValue.getId()).isEqualTo(expectedValue.getId());
-            assertThat(actualValue.getName()).isNotEqualTo(expectedValue.getName());
-            assertThat(actualValue.getDescription()).isNotEqualTo(expectedValue.getDescription());
+            assertThat(actualValue.id()).isEqualTo(expectedValue.id());
+            assertThat(actualValue.price()).isEqualTo(expectedValue.price());
+            assertThat(actualValue.duration()).isEqualTo(expectedValue.duration());
         }
 
         @Test
-        @DisplayName("test update should return GiftCertificateResponse without update")
-        void testUpdateShouldReturnGiftCertificateResponseWithoutUpdate() {
+        @DisplayName("test should return GiftCertificateResponse without update")
+        void testShouldReturnGiftCertificateResponseWithoutUpdate() {
             GiftCertificate mockedGiftCertificate = TEST_BUILDER.build();
-            GiftCertificateRequest expectedValue = giftCertificateMapper.toRequest(mockedGiftCertificate);
+            PriceDurationUpdateRequest expectedValue = new PriceDurationUpdateRequest(
+                    mockedGiftCertificate.getId(),
+                    mockedGiftCertificate.getPrice(),
+                    mockedGiftCertificate.getDuration());
             long id = mockedGiftCertificate.getId();
 
             doReturn(Optional.of(mockedGiftCertificate))
-                    .when(giftCertificateDao)
+                    .when(giftCertificateRepository)
                     .findById(id);
 
             doReturn(mockedGiftCertificate)
-                    .when(giftCertificateDao)
-                    .update(mockedGiftCertificate);
+                    .when(giftCertificateRepository)
+                    .saveAndFlush(mockedGiftCertificate);
 
             GiftCertificateResponse actualValue = giftCertificateService.update(expectedValue);
 
-            assertThat(actualValue.getId()).isEqualTo(expectedValue.getId());
-            assertThat(actualValue.getName()).isEqualTo(expectedValue.getName());
-            assertThat(actualValue.getTags()).containsAll(expectedValue.getTags());
+            assertThat(actualValue.id()).isEqualTo(expectedValue.id());
+            assertThat(actualValue.price()).isEqualTo(expectedValue.price());
+            assertThat(actualValue.duration()).isEqualTo(expectedValue.duration());
         }
 
     }
@@ -285,36 +296,40 @@ class GiftCertificateServiceImplTest {
     class DeleteTest {
 
         @Test
-        @DisplayName("test delete should invoke method 1 time")
-        void testDeleteShouldInvokeOneTime() {
+        @DisplayName("test should invoke method 1 time")
+        void testShouldInvokeOneTime() {
             GiftCertificate mockedGiftCertificate = TEST_BUILDER.build();
             long id = mockedGiftCertificate.getId();
 
             doReturn(Optional.of(mockedGiftCertificate))
-                    .when(giftCertificateDao)
-                    .delete(id);
+                    .when(giftCertificateRepository)
+                    .findById(id);
+
+            doNothing()
+                    .when(giftCertificateRepository)
+                    .delete(mockedGiftCertificate);
 
             giftCertificateService.delete(id);
 
-            verify(giftCertificateDao, times(1))
-                    .delete(id);
+            verify(giftCertificateRepository, times(1))
+                    .delete(mockedGiftCertificate);
         }
 
         @Test
-        @DisplayName("test delete throw NoSuchGiftCertificateException")
-        void testDeleteThrowNoSuchGiftCertificateException() {
+        @DisplayName("test throw NoSuchGiftCertificateException")
+        void testThrowNoSuchGiftCertificateException() {
             long id = 2L;
 
             doThrow(new NoSuchGiftCertificateException(""))
-                    .when(giftCertificateDao)
-                    .delete(id);
+                    .when(giftCertificateRepository)
+                    .findById(id);
 
             assertThrows(NoSuchGiftCertificateException.class, () -> giftCertificateService.delete(id));
         }
 
         @Test
-        @DisplayName("test delete throw NoSuchGiftCertificateException with expected message")
-        void testDeleteThrowNoSuchGiftCertificateExceptionWithExpectedMessage() {
+        @DisplayName("test throw NoSuchGiftCertificateException with expected message")
+        void testThrowNoSuchGiftCertificateExceptionWithExpectedMessage() {
             long id = 1L;
             String expectedMessage = "There is no GiftCertificate with ID " + id + " to delete";
 
@@ -323,6 +338,42 @@ class GiftCertificateServiceImplTest {
             String actualMessage = exception.getMessage();
 
             assertThat(actualMessage).isEqualTo(expectedMessage);
+        }
+
+    }
+
+    @Nested
+    class FindAllByIdIn {
+
+        @Test
+        @DisplayName("test should return List that contains expected values")
+        void testShouldReturnListThatContainsExpectedValues() {
+            GiftCertificate firstMockedTag = TEST_BUILDER.withId(3L).withName("Big").build();
+            GiftCertificate secondMockedTag = TEST_BUILDER.withId(2L).withName("Little").build();
+            List<Long> ids = List.of(3L, 2L);
+            List<GiftCertificate> expectedValues = List.of(firstMockedTag, secondMockedTag);
+
+            doReturn(expectedValues)
+                    .when(giftCertificateRepository)
+                    .findAllByIdIn(ids);
+
+            List<GiftCertificate> actualValues = giftCertificateService.findAllByIdIn(ids);
+
+            assertThat(actualValues).containsAll(expectedValues);
+        }
+
+        @Test
+        @DisplayName("test should return empty List")
+        void testShouldReturnEmptyList() {
+            List<Long> ids = List.of(4L);
+
+            doReturn(List.of())
+                    .when(giftCertificateRepository)
+                    .findAllByIdIn(ids);
+
+            List<GiftCertificate> actualValues = giftCertificateService.findAllByIdIn(ids);
+
+            assertThat(actualValues).isEmpty();
         }
 
     }
