@@ -24,9 +24,9 @@ public class GiftCertificateTestBuilder implements TestBuilder<GiftCertificate> 
     private BigDecimal price = BigDecimal.TEN;
     private Integer duration = 5;
     private LocalDateTime createDate = LocalDateTime.
-            of(2008, Month.APRIL, 1, 12, 30, 55, 40000);
+            of(2008, Month.APRIL, 1, 12, 30, 55);
     private LocalDateTime lastUpdateDate = LocalDateTime
-            .of(2008, Month.MAY, 9, 9, 23, 14, 22500);
+            .of(2008, Month.MAY, 9, 9, 23, 14);
     private List<Tag> tags = new ArrayList<>(List.of(
             TagTestBuilder.aTag().build(),
             TagTestBuilder.aTag().withId(2L).withName("Rick").build(),

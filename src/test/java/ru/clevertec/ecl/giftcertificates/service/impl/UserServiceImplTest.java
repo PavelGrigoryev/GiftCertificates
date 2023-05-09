@@ -15,11 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import ru.clevertec.ecl.giftcertificates.dto.UserDto;
 import ru.clevertec.ecl.giftcertificates.dto.pagination.UserPageRequest;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchUserException;
-import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapperImpl;
-import ru.clevertec.ecl.giftcertificates.mapper.OrderMapperImpl;
-import ru.clevertec.ecl.giftcertificates.mapper.TagMapperImpl;
 import ru.clevertec.ecl.giftcertificates.mapper.UserMapper;
-import ru.clevertec.ecl.giftcertificates.mapper.UserMapperImpl;
 import ru.clevertec.ecl.giftcertificates.model.User;
 import ru.clevertec.ecl.giftcertificates.repository.UserRepository;
 import ru.clevertec.ecl.giftcertificates.service.UserService;
@@ -35,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 
-@SpringBootTest(classes = {UserMapperImpl.class, OrderMapperImpl.class, GiftCertificateMapperImpl.class, TagMapperImpl.class})
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 

@@ -23,8 +23,6 @@ import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdate
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchGiftCertificateException;
 import ru.clevertec.ecl.giftcertificates.exception.NoTagWithTheSameNameException;
 import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapper;
-import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapperImpl;
-import ru.clevertec.ecl.giftcertificates.mapper.TagMapperImpl;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 import ru.clevertec.ecl.giftcertificates.repository.GiftCertificateRepository;
@@ -48,7 +46,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest(classes = {GiftCertificateMapperImpl.class, TagMapperImpl.class})
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class GiftCertificateServiceImplTest {
 

@@ -21,9 +21,9 @@ public class OrderTestBuilder implements TestBuilder<Order> {
     private Long id = 1L;
     private BigDecimal price = BigDecimal.TEN;
     private LocalDateTime purchaseTime = LocalDateTime.
-            of(2020, Month.APRIL, 25, 12, 30, 55, 40000);
+            of(2020, Month.APRIL, 25, 12, 30, 55);
     private LocalDateTime lastAdditionTime = LocalDateTime.
-            of(2021, Month.JULY, 14, 15, 12, 47, 23545);
+            of(2021, Month.JULY, 14, 15, 12, 47);
     private List<GiftCertificate> giftCertificates = new ArrayList<>(List.of(
             GiftCertificateTestBuilder.aGiftCertificate().withTags(
                     List.of(TagTestBuilder.aTag().build())

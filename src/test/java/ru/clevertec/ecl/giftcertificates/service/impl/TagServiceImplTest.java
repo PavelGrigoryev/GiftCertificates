@@ -23,7 +23,6 @@ import ru.clevertec.ecl.giftcertificates.dto.pagination.TagPageRequest;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchTagException;
 import ru.clevertec.ecl.giftcertificates.exception.NoTagWithTheSameNameException;
 import ru.clevertec.ecl.giftcertificates.mapper.TagMapper;
-import ru.clevertec.ecl.giftcertificates.mapper.TagMapperImpl;
 import ru.clevertec.ecl.giftcertificates.model.Tag;
 import ru.clevertec.ecl.giftcertificates.repository.TagRepository;
 import ru.clevertec.ecl.giftcertificates.util.impl.TagPageRequestTestBuilder;
@@ -42,7 +41,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest(classes = TagMapperImpl.class)
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class TagServiceImplTest {
 

@@ -18,12 +18,8 @@ import ru.clevertec.ecl.giftcertificates.dto.order.UpdateYourOrderRequest;
 import ru.clevertec.ecl.giftcertificates.dto.pagination.OrderPageRequest;
 import ru.clevertec.ecl.giftcertificates.exception.AlreadyHaveThisCertificateException;
 import ru.clevertec.ecl.giftcertificates.exception.NoRelationBetweenOrderAndUserException;
-import ru.clevertec.ecl.giftcertificates.mapper.GiftCertificateMapperImpl;
 import ru.clevertec.ecl.giftcertificates.mapper.OrderMapper;
-import ru.clevertec.ecl.giftcertificates.mapper.OrderMapperImpl;
-import ru.clevertec.ecl.giftcertificates.mapper.TagMapperImpl;
 import ru.clevertec.ecl.giftcertificates.mapper.UserMapper;
-import ru.clevertec.ecl.giftcertificates.mapper.UserMapperImpl;
 import ru.clevertec.ecl.giftcertificates.model.GiftCertificate;
 import ru.clevertec.ecl.giftcertificates.model.Order;
 import ru.clevertec.ecl.giftcertificates.model.User;
@@ -49,7 +45,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest(classes = {UserMapperImpl.class, OrderMapperImpl.class, GiftCertificateMapperImpl.class, TagMapperImpl.class})
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
 
