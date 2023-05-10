@@ -2,16 +2,15 @@ package ru.clevertec.ecl.giftcertificates.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import ru.clevertec.ecl.giftcertificates.annotation.ControllerTest;
 import ru.clevertec.ecl.giftcertificates.dto.DeleteResponse;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
@@ -28,18 +27,15 @@ import java.util.List;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient
+@ControllerTest
+@RequiredArgsConstructor
 class GiftCertificateControllerTest {
 
-    @Autowired
-    private WebTestClient webTestClient;
     @MockBean
     private GiftCertificateService giftCertificateService;
-    @Autowired
-    private GiftCertificateMapper giftCertificateMapper;
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final WebTestClient webTestClient;
+    private final GiftCertificateMapper giftCertificateMapper;
+    private final ObjectMapper objectMapper;
     private static final GiftCertificateTestBuilder TEST_BUILDER = GiftCertificateTestBuilder.aGiftCertificate();
 
     @Nested

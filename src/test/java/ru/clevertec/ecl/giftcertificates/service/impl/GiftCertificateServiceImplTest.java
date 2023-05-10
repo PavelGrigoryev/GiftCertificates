@@ -2,21 +2,19 @@ package ru.clevertec.ecl.giftcertificates.service.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
+import ru.clevertec.ecl.giftcertificates.annotation.ServiceTest;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequest;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdateRequest;
@@ -46,8 +44,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(MockitoExtension.class)
+@ServiceTest
+@RequiredArgsConstructor
 class GiftCertificateServiceImplTest {
 
     private GiftCertificateService giftCertificateService;
@@ -57,8 +55,7 @@ class GiftCertificateServiceImplTest {
     private GiftCertificateRepository giftCertificateRepository;
     @Mock
     private EntityManager entityManager;
-    @Autowired
-    private GiftCertificateMapper giftCertificateMapper;
+    private final GiftCertificateMapper giftCertificateMapper;
     private static final GiftCertificateTestBuilder TEST_BUILDER = GiftCertificateTestBuilder.aGiftCertificate();
     @Captor
     private ArgumentCaptor<GiftCertificate> captor;

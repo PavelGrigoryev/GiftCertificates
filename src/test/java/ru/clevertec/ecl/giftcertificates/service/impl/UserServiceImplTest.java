@@ -1,17 +1,15 @@
 package ru.clevertec.ecl.giftcertificates.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import ru.clevertec.ecl.giftcertificates.annotation.ServiceTest;
 import ru.clevertec.ecl.giftcertificates.dto.UserDto;
 import ru.clevertec.ecl.giftcertificates.dto.pagination.UserPageRequest;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchUserException;
@@ -31,15 +29,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 
-@SpringBootTest
-@ExtendWith(MockitoExtension.class)
+@ServiceTest
+@RequiredArgsConstructor
 class UserServiceImplTest {
 
     private UserService userService;
     @Mock
     private UserRepository userRepository;
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
     private static final UserTestBuilder TEST_BUILDER = UserTestBuilder.aUser();
 
     @BeforeEach

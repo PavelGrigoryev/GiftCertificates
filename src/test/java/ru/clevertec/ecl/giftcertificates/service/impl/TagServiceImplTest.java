@@ -1,23 +1,21 @@
 package ru.clevertec.ecl.giftcertificates.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import ru.clevertec.ecl.giftcertificates.annotation.ServiceTest;
 import ru.clevertec.ecl.giftcertificates.dto.TagDto;
 import ru.clevertec.ecl.giftcertificates.dto.pagination.TagPageRequest;
 import ru.clevertec.ecl.giftcertificates.exception.NoSuchTagException;
@@ -41,15 +39,14 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(MockitoExtension.class)
+@ServiceTest
+@RequiredArgsConstructor
 class TagServiceImplTest {
 
     private TagServiceImpl tagService;
     @Mock
     private TagRepository tagRepository;
-    @Autowired
-    private TagMapper tagMapper;
+    private final TagMapper tagMapper;
     private static final TagTestBuilder TEST_BUILDER = TagTestBuilder.aTag();
     @Captor
     private ArgumentCaptor<Tag> captor;

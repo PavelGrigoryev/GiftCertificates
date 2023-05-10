@@ -1,16 +1,14 @@
 package ru.clevertec.ecl.giftcertificates.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
+import ru.clevertec.ecl.giftcertificates.annotation.ServiceTest;
 import ru.clevertec.ecl.giftcertificates.dto.UserDto;
 import ru.clevertec.ecl.giftcertificates.dto.order.MakeAnOrderRequest;
 import ru.clevertec.ecl.giftcertificates.dto.order.OrderResponse;
@@ -45,8 +43,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(MockitoExtension.class)
+@ServiceTest
+@RequiredArgsConstructor
 class OrderServiceImplTest {
 
     private OrderService orderService;
@@ -56,10 +54,8 @@ class OrderServiceImplTest {
     private UserService userService;
     @Mock
     private GiftCertificateService giftCertificateService;
-    @Autowired
-    private OrderMapper orderMapper;
-    @Autowired
-    private UserMapper userMapper;
+    private final OrderMapper orderMapper;
+    private final UserMapper userMapper;
     private static final OrderTestBuilder TEST_BUILDER = OrderTestBuilder.aOrder();
 
     @BeforeEach
