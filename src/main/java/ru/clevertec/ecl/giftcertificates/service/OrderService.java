@@ -11,10 +11,10 @@ public interface OrderService {
 
     OrderResponse makeAnOrder(MakeAnOrderRequest request);
 
-    List<OrderResponse> findAllByUserId(Long id, OrderPageRequest request);
+    List<OrderResponse> findAllUserOrders(Long id, OrderPageRequest request);
 
-    OrderResponse addToYourOrder(UpdateYourOrderRequest request);
+    OrderResponse updateUserOrder(UpdateYourOrderRequest request);
 
-    void delete(Long userId, Long orderId);
+    void deleteUserOrder(Long userId, Long orderId);
 
 }

@@ -55,7 +55,8 @@ SELECT setval('users_id_seq', (SELECT max(id) FROM users));
 INSERT INTO orders (id, price, purchase_time, last_addition_time, user_id, created_by, last_modified_by, operation)
 VALUES (1, 100, '2023-05-08 14:30:59.093', '2023-05-08 14:30:59.093', 1, 'Pavel', 'Pavel', 'INSERT'),
        (2, 58.89, '2023-05-08 14:30:59.093', '2023-05-08 14:30:59.093', 1, 'Pavel', 'Pavel', 'INSERT'),
-       (3, 45, '2023-05-08 14:30:59.093', '2023-05-08 14:30:59.093', 1, 'Pavel', 'Pavel', 'INSERT');
+       (3, 45, '2023-05-08 14:30:59.093', '2023-05-08 14:30:59.093', 1, 'Pavel', 'Pavel', 'INSERT'),
+       (4, 45, '2023-05-08 14:30:59.093', '2023-05-08 14:30:59.093', 2, 'Pavel', 'Pavel', 'INSERT');
 
 SELECT setval('orders_id_seq', (SELECT max(id) FROM orders));
 
@@ -64,4 +65,5 @@ VALUES (1, 2),
        (1, 6),
        (2, 1),
        (2, 7),
-       (3, 2);
+       (3, 2),
+       (4, 2);

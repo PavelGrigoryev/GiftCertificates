@@ -31,10 +31,7 @@ public class GiftCertificatesExceptionHandler {
      */
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<IncorrectData> serviceException(NotFoundException exception) {
-        IncorrectData incorrectData = new IncorrectData(
-                exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_FOUND.toString());
-        log.error(incorrectData.toString());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(incorrectData);
+        return getResponse(exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -45,10 +42,7 @@ public class GiftCertificatesExceptionHandler {
      */
     @ExceptionHandler(NoTagWithTheSameNameException.class)
     public ResponseEntity<IncorrectData> noTagWithTheSameNameException(NoTagWithTheSameNameException exception) {
-        IncorrectData incorrectData = new IncorrectData(
-                exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_ACCEPTABLE.toString());
-        log.error(incorrectData.toString());
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(incorrectData);
+        return getResponse(exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     /**
@@ -59,10 +53,7 @@ public class GiftCertificatesExceptionHandler {
      */
     @ExceptionHandler(AlreadyHaveThisCertificateException.class)
     public ResponseEntity<IncorrectData> alreadyHaveThisCertificateException(AlreadyHaveThisCertificateException exception) {
-        IncorrectData incorrectData = new IncorrectData(
-                exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_ACCEPTABLE.toString());
-        log.error(incorrectData.toString());
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(incorrectData);
+        return getResponse(exception.getClass().getSimpleName(), exception.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     /**
@@ -99,6 +90,20 @@ public class GiftCertificatesExceptionHandler {
         log.error(violations.toString());
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ValidationErrorResponse(HttpStatus.CONFLICT.toString(), violations));
+    }
+
+    /**
+     * Creates response {@link ResponseEntity} with {@link IncorrectData}.
+     *
+     * @param name    the simple name of exception
+     * @param message the message from exception
+     * @param status  the {@link HttpStatus} code
+     * @return A ResponseEntity containing an IncorrectData object and a status code.
+     */
+    private static ResponseEntity<IncorrectData> getResponse(String name, String message, HttpStatus status) {
+        IncorrectData incorrectData = new IncorrectData(name, message, status.toString());
+        log.error(incorrectData.toString());
+        return ResponseEntity.status(status).body(incorrectData);
     }
 
 }

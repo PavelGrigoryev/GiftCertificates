@@ -1,4 +1,4 @@
-package ru.clevertec.ecl.giftcertificates.swagger;
+package ru.clevertec.ecl.giftcertificates.controller.openapi;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +20,7 @@ import ru.clevertec.ecl.giftcertificates.exception.model.ValidationErrorResponse
 import java.util.List;
 
 @Tag(name = "Tag", description = "The Tag Api")
-public interface TagSwagger {
+public interface TagOpenApi {
 
     @Operation(summary = "Find Tag by id.", tags = "Tag",
             parameters = @Parameter(name = "id", description = "Enter id here", example = "2"))

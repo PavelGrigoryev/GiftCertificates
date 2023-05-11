@@ -19,21 +19,20 @@ import java.util.List;
         "last_update_date",
         "tags"
 })
-public record GiftCertificateResponse(
-        Long id,
-        String name,
-        String description,
-        BigDecimal price,
-        Integer duration,
+public record GiftCertificateResponse(Long id,
+                                      String name,
+                                      String description,
+                                      BigDecimal price,
+                                      Integer duration,
 
-        @JsonProperty("create_date")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
-        LocalDateTime createDate,
+                                      @JsonProperty("create_date")
+                                      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+                                      LocalDateTime createDate,
 
-        @JsonProperty("last_update_date")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
-        LocalDateTime lastUpdateDate,
+                                      @JsonProperty("last_update_date")
+                                      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+                                      LocalDateTime lastUpdateDate,
 
-        List<TagDto> tags
+                                      List<TagDto> tags
 ) {
 }

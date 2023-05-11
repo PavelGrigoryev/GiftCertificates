@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
@@ -47,7 +47,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @throws NoSuchGiftCertificateException if GiftCertificate is not exists by finding it by ID.
      */
     @Override
-    @Transactional(readOnly = true)
     public GiftCertificateResponse findById(Long id) {
         GiftCertificateResponse giftCertificateResponse = giftCertificateRepository.findById(id)
                 .map(giftCertificateMapper::toResponse)
@@ -67,7 +66,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @return a filtered and sorted by one or many parameters list of GiftCertificateResponse.
      */
     @Override
-    @Transactional(readOnly = true)
     public List<GiftCertificateResponse> findAllWithTags(String tagName, String part, String sortBy, String order) {
         String sort = "date".equalsIgnoreCase(sortBy) ? "createDate" : "name";
         Sort by = sortBy != null ? Sort.by(sort) : Sort.by("id");
@@ -91,6 +89,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @throws NoTagWithTheSameNameException if Tag is already exist with the same name.
      */
     @Override
+    @Transactional
     public GiftCertificateResponse save(GiftCertificateRequest giftCertificateRequest) {
         GiftCertificate giftCertificate = giftCertificateMapper.fromRequest(giftCertificateRequest);
         List<Tag> byNameIn = tagService.findByNameIn(giftCertificate.getTags()
@@ -123,10 +122,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @throws NoSuchGiftCertificateException if GiftCertificate is not exists by finding it by ID.
      */
     @Override
+    @Transactional
     public GiftCertificateResponse update(PriceDurationUpdateRequest request) {
         GiftCertificate byId = giftCertificateRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchGiftCertificateException("GiftCertificate with ID " + request.id() + " does not exist"));
-        GiftCertificate giftCertificate = createUpdatedGiftCertificate(request, byId);
+        GiftCertificate giftCertificate = giftCertificateMapper.createUpdatedGiftCertificate(request, byId);
         GiftCertificate updated = giftCertificateRepository.saveAndFlush(giftCertificate);
         GiftCertificateResponse updatedDto = giftCertificateMapper.toResponse(updated);
         log.info("update {}", updatedDto);
@@ -140,6 +140,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @throws NoSuchGiftCertificateException if GiftCertificate is not exists by finding it by ID.
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         GiftCertificate giftCertificate = giftCertificateRepository.findById(id)
                 .orElseThrow(() ->
@@ -159,26 +160,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         List<GiftCertificate> allByIdIn = giftCertificateRepository.findAllByIdIn(ids);
         log.info("findAllByIdIn {}", allByIdIn);
         return allByIdIn;
-    }
-
-    /**
-     * Create {@link GiftCertificate} for update in database. Check price and duration fields for null, if they null
-     * - sets old fields from GiftCertificate that was found by ID.
-     *
-     * @param request the request from {@link PriceDurationUpdateRequest}.
-     * @param byId    the existing GiftCertificate that was found by ID.
-     * @return the created GiftCertificate
-     */
-    private static GiftCertificate createUpdatedGiftCertificate(PriceDurationUpdateRequest request, GiftCertificate byId) {
-        return GiftCertificate.builder()
-                .id(byId.getId())
-                .name(byId.getName())
-                .description(byId.getDescription())
-                .price(request.price() != null ? request.price() : byId.getPrice())
-                .duration(request.duration() != null ? request.duration() : byId.getDuration())
-                .createDate(byId.getCreateDate())
-                .tags(byId.getTags())
-                .build();
     }
 
 }

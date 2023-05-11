@@ -2,6 +2,7 @@ package ru.clevertec.ecl.giftcertificates.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,21 +19,24 @@ import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateRequ
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.GiftCertificateResponse;
 import ru.clevertec.ecl.giftcertificates.dto.giftcertificate.PriceDurationUpdateRequest;
 import ru.clevertec.ecl.giftcertificates.service.GiftCertificateService;
-import ru.clevertec.ecl.giftcertificates.swagger.GiftCertificateSwagger;
+import ru.clevertec.ecl.giftcertificates.controller.openapi.GiftCertificateOpenApi;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/gift-certificates")
-public class GiftCertificateController implements GiftCertificateSwagger {
+public class GiftCertificateController implements GiftCertificateOpenApi {
 
     private final GiftCertificateService giftCertificateService;
 
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<GiftCertificateResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(giftCertificateService.findById(id));
+        ResponseEntity<GiftCertificateResponse> response = ResponseEntity.ok(giftCertificateService.findById(id));
+        log.info("findById: id={}, \nresponse={}", id, response);
+        return response;
     }
 
     @Override
@@ -41,26 +45,38 @@ public class GiftCertificateController implements GiftCertificateSwagger {
                                                                          @RequestParam(required = false) String part,
                                                                          @RequestParam(required = false) String sortBy,
                                                                          @RequestParam(required = false) String order) {
-        return ResponseEntity.ok(giftCertificateService.findAllWithTags(tagName, part, sortBy, order));
+        ResponseEntity<List<GiftCertificateResponse>> response =
+                ResponseEntity.ok(giftCertificateService.findAllWithTags(tagName, part, sortBy, order));
+        log.info("findAllWithTags: tagName={}, part={}, sortBy={}, order={}, \nresponse={}",
+                tagName, part, sortBy, order, response);
+        return response;
     }
 
     @Override
     @PostMapping
     public ResponseEntity<GiftCertificateResponse> save(@RequestBody @Valid GiftCertificateRequest giftCertificateRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(giftCertificateService.save(giftCertificateRequest));
+        ResponseEntity<GiftCertificateResponse> response =
+                ResponseEntity.status(HttpStatus.CREATED).body(giftCertificateService.save(giftCertificateRequest));
+        log.info("save: request={}, \nresponse={}", giftCertificateRequest, response);
+        return response;
     }
 
     @Override
     @PutMapping
     public ResponseEntity<GiftCertificateResponse> update(@RequestBody @Valid PriceDurationUpdateRequest request) {
-        return ResponseEntity.ok(giftCertificateService.update(request));
+        ResponseEntity<GiftCertificateResponse> response = ResponseEntity.ok(giftCertificateService.update(request));
+        log.info("update: request={}, \nresponse={}", request, response);
+        return response;
     }
 
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteResponse> delete(@PathVariable Long id) {
         giftCertificateService.delete(id);
-        return ResponseEntity.ok(new DeleteResponse("GiftCertificate with ID " + id + " was successfully deleted"));
+        ResponseEntity<DeleteResponse> response =
+                ResponseEntity.ok(new DeleteResponse("GiftCertificate with ID " + id + " was successfully deleted"));
+        log.info("delete: id={}, \nresponse={}", id, response);
+        return response;
     }
 
 }

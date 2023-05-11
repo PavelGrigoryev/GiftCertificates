@@ -36,7 +36,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
@@ -53,15 +53,12 @@ public class OrderServiceImpl implements OrderService {
      * @return {@link OrderResponse} with all parameters and mapped from Order entity.
      */
     @Override
+    @Transactional
     public OrderResponse makeAnOrder(MakeAnOrderRequest request) {
         User user = userMapper.fromDto(userService.findById(request.userId()));
         List<GiftCertificate> giftCertificates = giftCertificateService.findAllByIdIn(request.giftIds());
         BigDecimal sum = getSum(giftCertificates);
-        Order order = Order.builder()
-                .price(sum)
-                .user(user)
-                .giftCertificates(giftCertificates)
-                .build();
+        Order order = orderMapper.createOrder(user, giftCertificates, sum);
         OrderResponse response = orderMapper.toDto(orderRepository.save(order));
         log.info("makeAnOrder {}", response);
         return response;
@@ -75,8 +72,7 @@ public class OrderServiceImpl implements OrderService {
      * @return a sorted by pageable and mapped from entity to dto list of all OrderResponses.
      */
     @Override
-    @Transactional(readOnly = true)
-    public List<OrderResponse> findAllByUserId(Long id, OrderPageRequest request) {
+    public List<OrderResponse> findAllUserOrders(Long id, OrderPageRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize(), Sort.by(request.getSortBy()));
         List<OrderResponse> orders = orderRepository.findAllByUserId(id, pageRequest).stream()
                 .map(orderMapper::toDto)
@@ -94,7 +90,8 @@ public class OrderServiceImpl implements OrderService {
      * @throws AlreadyHaveThisCertificateException    if Order already contains this GiftCertificate.
      */
     @Override
-    public OrderResponse addToYourOrder(UpdateYourOrderRequest request) {
+    @Transactional
+    public OrderResponse updateUserOrder(UpdateYourOrderRequest request) {
         Order order = orderRepository.findOrderByIdAndUserId(request.orderId(), request.userId())
                 .orElseThrow(() -> new NoRelationBetweenOrderAndUserException(
                         "User with ID " + request.userId() + " does not have such Order with ID " + request.orderId()));
@@ -120,7 +117,8 @@ public class OrderServiceImpl implements OrderService {
      * @throws NoRelationBetweenOrderAndUserException if User has no relations with Order.
      */
     @Override
-    public void delete(Long userId, Long orderId) {
+    @Transactional
+    public void deleteUserOrder(Long userId, Long orderId) {
         Order order = orderRepository.findOrderByIdAndUserId(orderId, userId)
                 .orElseThrow(() -> new NoRelationBetweenOrderAndUserException(
                         "User with ID " + userId + " does not have such Order with ID " + orderId));

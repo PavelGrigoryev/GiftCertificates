@@ -4,7 +4,7 @@ spring:
     password: test
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:

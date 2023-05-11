@@ -1,4 +1,4 @@
-package ru.clevertec.ecl.giftcertificates.swagger;
+package ru.clevertec.ecl.giftcertificates.controller.openapi;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,9 +23,9 @@ import ru.clevertec.ecl.giftcertificates.exception.model.ValidationErrorResponse
 import java.util.List;
 
 @Tag(name = "Order", description = "The Order Api")
-public interface OrderSwagger {
+public interface OrderOpenApi {
 
-    @Operation(summary = "Make an Order fot User.", tags = "Order",
+    @Operation(summary = "Make an Order for User.", tags = "Order",
             requestBody = @RequestBody(description = "Enter User id with GiftCertificates ids, what you want to buy",
                     content = @Content(schema = @Schema(implementation = MakeAnOrderRequest.class),
                             examples = @ExampleObject("""
@@ -67,6 +67,15 @@ public interface OrderSwagger {
                                   ]
                                 }
                               ]
+                            }
+                            """))),
+            @ApiResponse(responseCode = "404", description = "No User with this id in database",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = IncorrectData.class), examples = @ExampleObject("""
+                            {
+                               "exception": "NoRelationBetweenOrderAndUserException",
+                               "errorMessage": "User with ID 2 does not have such Order with ID 4",
+                               "errorCode": "404 NOT_FOUND"
                             }
                             """))),
             @ApiResponse(responseCode = "409", description = "Validation error",
@@ -133,9 +142,9 @@ public interface OrderSwagger {
                                     }
                                     """)))
     })
-    ResponseEntity<List<OrderResponse>> findAllYourOrders(Long id, @ParameterObject OrderPageRequest request);
+    ResponseEntity<List<OrderResponse>> findAllUserOrders(Long id, @ParameterObject OrderPageRequest request);
 
-    @Operation(summary = "Add some GiftCertificates to your Order.", tags = "Order",
+    @Operation(summary = "Add some GiftCertificates to User Order.", tags = "Order",
             requestBody = @RequestBody(description = "Enter User id and Order id with GiftCertificates ids, what you want to add",
                     content = @Content(schema = @Schema(implementation = UpdateYourOrderRequest.class),
                             examples = @ExampleObject("""
@@ -213,7 +222,7 @@ public interface OrderSwagger {
                                     }
                                     """)))
     })
-    ResponseEntity<OrderResponse> addToYourOrder(UpdateYourOrderRequest request);
+    ResponseEntity<OrderResponse> updateUserOrder(UpdateYourOrderRequest request);
 
     @Operation(summary = "Delete Order by User id and Order id.", tags = "Order",
             parameters = {
@@ -238,6 +247,6 @@ public interface OrderSwagger {
                             }
                             """)))
     })
-    ResponseEntity<DeleteResponse> deleteYourOrder(@RequestParam Long userId, Long orderId);
+    ResponseEntity<DeleteResponse> deleteUserOrder(@RequestParam Long userId, Long orderId);
 
 }

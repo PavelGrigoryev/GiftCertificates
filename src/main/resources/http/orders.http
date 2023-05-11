@@ -10,11 +10,11 @@ Content-Type: application/json
   ]
 }
 
-###findAllYourOrders
+###findAllUserOrders
 GET http://localhost:8080/orders/2?page=0&size=10&sortBy=price
 Accept: application/json
 
-###addToYourOrder
+###updateUserOrder
 PUT http://localhost:8080/orders
 Content-Type: application/json
 
@@ -26,6 +26,6 @@ Content-Type: application/json
   ]
 }
 
-###deleteYourOrder
+###deleteUserOrder
 DELETE http://localhost:8080/orders?userId=2&orderId=5
 Content-Type: application/json

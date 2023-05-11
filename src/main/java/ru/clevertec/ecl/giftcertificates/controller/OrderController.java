@@ -2,6 +2,7 @@ package ru.clevertec.ecl.giftcertificates.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,41 +20,51 @@ import ru.clevertec.ecl.giftcertificates.dto.order.OrderResponse;
 import ru.clevertec.ecl.giftcertificates.dto.order.UpdateYourOrderRequest;
 import ru.clevertec.ecl.giftcertificates.dto.pagination.OrderPageRequest;
 import ru.clevertec.ecl.giftcertificates.service.OrderService;
-import ru.clevertec.ecl.giftcertificates.swagger.OrderSwagger;
+import ru.clevertec.ecl.giftcertificates.controller.openapi.OrderOpenApi;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
-public class OrderController implements OrderSwagger {
+public class OrderController implements OrderOpenApi {
 
     private final OrderService orderService;
 
     @Override
     @PostMapping
     public ResponseEntity<OrderResponse> makeAnOrder(@RequestBody @Valid MakeAnOrderRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.makeAnOrder(request));
+        ResponseEntity<OrderResponse> response = ResponseEntity.status(HttpStatus.CREATED).body(orderService.makeAnOrder(request));
+        log.info("makeAnOrder: request={}, \nresponse={}", request, response);
+        return response;
     }
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<List<OrderResponse>> findAllYourOrders(@PathVariable Long id, @Valid OrderPageRequest request) {
-        return ResponseEntity.ok(orderService.findAllByUserId(id, request));
+    public ResponseEntity<List<OrderResponse>> findAllUserOrders(@PathVariable Long id, @Valid OrderPageRequest request) {
+        ResponseEntity<List<OrderResponse>> response = ResponseEntity.ok(orderService.findAllUserOrders(id, request));
+        log.info("findAllUserOrders: request={}, \nresponse={}", request, response);
+        return response;
     }
 
     @Override
     @PutMapping
-    public ResponseEntity<OrderResponse> addToYourOrder(@RequestBody @Valid UpdateYourOrderRequest request) {
-        return ResponseEntity.ok(orderService.addToYourOrder(request));
+    public ResponseEntity<OrderResponse> updateUserOrder(@RequestBody @Valid UpdateYourOrderRequest request) {
+        ResponseEntity<OrderResponse> response = ResponseEntity.ok(orderService.updateUserOrder(request));
+        log.info("updateUserOrder: request={}, \nresponse={}", request, response);
+        return response;
     }
 
     @Override
     @DeleteMapping
-    public ResponseEntity<DeleteResponse> deleteYourOrder(@RequestParam Long userId, Long orderId) {
-        orderService.delete(userId, orderId);
-        return ResponseEntity.ok(new DeleteResponse("Order with ID " + orderId
-                                                    + " for User with ID " + userId + " was successfully deleted"));
+    public ResponseEntity<DeleteResponse> deleteUserOrder(@RequestParam Long userId, Long orderId) {
+        orderService.deleteUserOrder(userId, orderId);
+        ResponseEntity<DeleteResponse> response =
+                ResponseEntity.ok(new DeleteResponse("Order with ID " + orderId
+                                                     + " for User with ID " + userId + " was successfully deleted"));
+        log.info("deleteUserOrder: userId={}, orderId={}, \nresponse={}", userId, orderId, response);
+        return response;
     }
 
 }

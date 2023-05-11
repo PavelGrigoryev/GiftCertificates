@@ -85,7 +85,7 @@ class OrderControllerTest {
     }
 
     @Nested
-    class FindAllYourOrdersGetEndpointTest {
+    class FindAllUserOrdersGetEndpointTest {
 
         @Test
         @DisplayName("test should return empty json and status 200")
@@ -95,7 +95,7 @@ class OrderControllerTest {
 
             doReturn(List.of())
                     .when(orderService)
-                    .findAllByUserId(id, request);
+                    .findAllUserOrders(id, request);
 
             webTestClient.get()
                     .uri("/orders/2?page=0&size=10&sortBy=price")
@@ -114,7 +114,7 @@ class OrderControllerTest {
 
             doReturn(List.of(response))
                     .when(orderService)
-                    .findAllByUserId(any(Long.class), any(OrderPageRequest.class));
+                    .findAllUserOrders(any(Long.class), any(OrderPageRequest.class));
 
             webTestClient.get()
                     .uri("/orders/2?page=0&size=10&sortBy=price")
@@ -145,7 +145,7 @@ class OrderControllerTest {
     }
 
     @Nested
-    class AddToYourOrderPutEndpointTest {
+    class UpdateUserOrderPutEndpointTest {
 
         @Test
         @DisplayName("test should return expected json and status 200")
@@ -155,7 +155,7 @@ class OrderControllerTest {
 
             doReturn(response)
                     .when(orderService)
-                    .addToYourOrder(request);
+                    .updateUserOrder(request);
 
             webTestClient.put()
                     .uri("/orders")
@@ -189,7 +189,7 @@ class OrderControllerTest {
     }
 
     @Nested
-    class DeleteYourOrderDeleteEndpointTest {
+    class DeleteUserOrderDeleteEndpointTest {
 
         @Test
         @DisplayName("test should return expected json and status 200")
@@ -201,7 +201,7 @@ class OrderControllerTest {
 
             doNothing()
                     .when(orderService)
-                    .delete(userId, orderId);
+                    .deleteUserOrder(userId, orderId);
 
             webTestClient.delete()
                     .uri("/orders?userId=" + userId + "&orderId=" + orderId)

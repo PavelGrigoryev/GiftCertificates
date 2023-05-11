@@ -138,7 +138,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .findAllByUserId(any(Long.class), any(PageRequest.class));
 
-            List<OrderResponse> actualValues = orderService.findAllByUserId(userId, request);
+            List<OrderResponse> actualValues = orderService.findAllUserOrders(userId, request);
 
             assertThat(actualValues).hasSize(expectedSize);
         }
@@ -154,7 +154,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .findAllByUserId(any(Long.class), any(PageRequest.class));
 
-            List<OrderResponse> actualValues = orderService.findAllByUserId(userId, request);
+            List<OrderResponse> actualValues = orderService.findAllUserOrders(userId, request);
 
             assertThat(actualValues).contains(orderMapper.toDto(mockedOrder));
         }
@@ -169,7 +169,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .findAllByUserId(any(Long.class), any(PageRequest.class));
 
-            List<OrderResponse> actualValues = orderService.findAllByUserId(userId, request);
+            List<OrderResponse> actualValues = orderService.findAllUserOrders(userId, request);
 
             assertThat(actualValues).isEmpty();
         }
@@ -198,7 +198,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .saveAndFlush(mockedOrder);
 
-            OrderResponse actualValue = orderService.addToYourOrder(request);
+            OrderResponse actualValue = orderService.updateUserOrder(request);
 
             assertThat(actualValue).isEqualTo(orderMapper.toDto(expectedValue));
         }
@@ -226,7 +226,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .saveAndFlush(mockedOrder);
 
-            OrderResponse actualValue = orderService.addToYourOrder(request);
+            OrderResponse actualValue = orderService.updateUserOrder(request);
 
             assertThat(actualValue.price()).isEqualTo(expectedValue.getPrice());
         }
@@ -240,7 +240,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .findOrderByIdAndUserId(request.orderId(), request.userId());
 
-            assertThrows(NoRelationBetweenOrderAndUserException.class, () -> orderService.addToYourOrder(request));
+            assertThrows(NoRelationBetweenOrderAndUserException.class, () -> orderService.updateUserOrder(request));
         }
 
         @Test
@@ -251,7 +251,7 @@ class OrderServiceImplTest {
                                      + " does not have such Order with ID " + request.orderId();
 
             Exception exception = assertThrows(NoRelationBetweenOrderAndUserException.class,
-                    () -> orderService.addToYourOrder(request));
+                    () -> orderService.updateUserOrder(request));
             String actualMessage = exception.getMessage();
 
             assertThat(actualMessage).isEqualTo(expectedMessage);
@@ -275,7 +275,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .saveAndFlush(mockedOrder);
 
-            assertThrows(AlreadyHaveThisCertificateException.class, () -> orderService.addToYourOrder(request));
+            assertThrows(AlreadyHaveThisCertificateException.class, () -> orderService.updateUserOrder(request));
         }
 
         @Test
@@ -298,7 +298,7 @@ class OrderServiceImplTest {
                     .saveAndFlush(mockedOrder);
 
             Exception exception = assertThrows(AlreadyHaveThisCertificateException.class,
-                    () -> orderService.addToYourOrder(request));
+                    () -> orderService.updateUserOrder(request));
             String actualMessage = exception.getMessage();
 
             assertThat(actualMessage).isEqualTo(expectedMessage);
@@ -324,7 +324,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .delete(mockedOrder);
 
-            orderService.delete(userId, orderId);
+            orderService.deleteUserOrder(userId, orderId);
 
             verify(orderRepository, times(1))
                     .delete(mockedOrder);
@@ -340,7 +340,7 @@ class OrderServiceImplTest {
                     .when(orderRepository)
                     .findOrderByIdAndUserId(orderId, userId);
 
-            assertThrows(NoRelationBetweenOrderAndUserException.class, () -> orderService.delete(userId, orderId));
+            assertThrows(NoRelationBetweenOrderAndUserException.class, () -> orderService.deleteUserOrder(userId, orderId));
         }
 
         @Test
@@ -351,7 +351,7 @@ class OrderServiceImplTest {
             String expectedMessage = "User with ID " + userId + " does not have such Order with ID " + orderId;
 
             Exception exception = assertThrows(NoRelationBetweenOrderAndUserException.class,
-                    () -> orderService.delete(userId, orderId));
+                    () -> orderService.deleteUserOrder(userId, orderId));
             String actualMessage = exception.getMessage();
 
             assertThat(actualMessage).isEqualTo(expectedMessage);

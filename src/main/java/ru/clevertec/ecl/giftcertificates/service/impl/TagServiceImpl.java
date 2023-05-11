@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
 
@@ -41,7 +41,6 @@ public class TagServiceImpl implements TagService {
      * @throws NoSuchTagException if Tag is not exists by finding it by ID.
      */
     @Override
-    @Transactional(readOnly = true)
     public TagDto findById(Long id) {
         TagDto tagDto = tagRepository.findById(id)
                 .map(tagMapper::toDto)
@@ -57,7 +56,6 @@ public class TagServiceImpl implements TagService {
      * @return a sorted by pageable and mapped from entity to dto list of all TagDto.
      */
     @Override
-    @Transactional(readOnly = true)
     public List<TagDto> findAll(TagPageRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize(), Sort.by(request.getSortBy()));
         List<TagDto> tags = tagRepository.findAll(pageRequest)
@@ -76,6 +74,7 @@ public class TagServiceImpl implements TagService {
      * @throws NoTagWithTheSameNameException if Tag is already exist with the same name.
      */
     @Override
+    @Transactional
     public TagDto save(TagDto tagDto) {
         Tag tag = tagMapper.fromDto(tagDto);
         Tag saved;
@@ -97,6 +96,7 @@ public class TagServiceImpl implements TagService {
      * @throws NoSuchTagException if Tag is not exists by finding it by ID.
      */
     @Override
+    @Transactional
     public TagDto update(TagDto tagDto) {
         Tag tag = tagMapper.fromDto(tagDto);
         Tag byId = tagRepository.findById(tag.getId())
@@ -118,6 +118,7 @@ public class TagServiceImpl implements TagService {
      * @throws NoSuchTagException if Tag is not exists by finding it by ID.
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         Tag tag = tagRepository.findById(id)
                 .orElseThrow(() -> new NoSuchTagException("There is no Tag with ID " + id + " to delete"));
