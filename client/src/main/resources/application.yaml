@@ -1,0 +1,5 @@
+server:
+  port: 8085
+base:
+  url:
+    tags: http://localhost:8080/tags

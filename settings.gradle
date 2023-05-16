@@ -1,2 +1,3 @@
 rootProject.name = 'GiftCertificates'
-
+include 'server'
+include 'client'

@@ -1,0 +1,7 @@
+###findById
+GET http://localhost:8080/users/1
+Accept: application/json
+
+###findAll
+GET http://localhost:8080/users?page=0&size=10&sortBy=id
+Accept: application/json

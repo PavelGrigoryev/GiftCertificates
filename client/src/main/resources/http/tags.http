@@ -1,0 +1,3 @@
+###findTagById
+GET http://localhost:8085/tags/2
+Accept: application/json
