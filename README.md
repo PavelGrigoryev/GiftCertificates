@@ -27,9 +27,9 @@ Crud applications for creating gift certificates with tags
    a [Docker](https://hub.docker.com/_/postgres) container)
 2. You need [Docker](https://www.docker.com/products/docker-desktop/) for integration test with testcontainers
 3. In Postgresql you have to create a database with name "gift_certificates". DDL: "CREATE DATABASE gift_certificates"
-4. In [application.yaml](src/main/resources/application.yaml) enter your username and password from your
+4. In [application.yaml](server/src/main/resources/application.yaml) enter your username and password from your
    local postgresql in line №4, №5
-5. Run [GiftCertificatesApplication.java](src/main/java/ru/clevertec/ecl/giftcertificates/GiftCertificatesApplication.java).
+5. Run [GiftCertificatesApplication.java](server/src/main/java/ru/clevertec/ecl/giftcertificates/GiftCertificatesApplication.java).
 Liquibase will create the required tables and fill them with default values.
 6. Application is ready to work.
 
@@ -46,17 +46,17 @@ Liquibase will create the required tables and fill them with default values.
 ### Documentation
 
 To view the API Swagger documentation
-[GiftCertificateSwagger](src/main/java/ru/clevertec/ecl/giftcertificates/swagger/GiftCertificateSwagger.java),
-[TagSwagger](src/main/java/ru/clevertec/ecl/giftcertificates/swagger/TagSwagger.java),
-[UserSwagger](src/main/java/ru/clevertec/ecl/giftcertificates/swagger/UserSwagger.java),
-[OrderSwagger](src/main/java/ru/clevertec/ecl/giftcertificates/swagger/OrderSwagger.java).
+[GiftCertificateOpenApi](server/src/main/java/ru/clevertec/ecl/giftcertificates/controller/openapi/GiftCertificateOpenApi.java),
+[TagOpenApi](server/src/main/java/ru/clevertec/ecl/giftcertificates/controller/openapi/TagOpenApi.java),
+[UserOpenApi](server/src/main/java/ru/clevertec/ecl/giftcertificates/controller/openapi/UserOpenApi.java),
+[OrderOpenApi](server/src/main/java/ru/clevertec/ecl/giftcertificates/controller/openapi/OrderOpenApi.java).
 Also, you can start the application and see:
 
 * [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 * [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
 
 ### Demonstration SQL execution (explain):
-Plan for query in [TagRepository](src/main/java/ru/clevertec/ecl/giftcertificates/repository/TagRepository.java).
+Plan for query in [TagRepository](server/src/main/java/ru/clevertec/ecl/giftcertificates/repository/TagRepository.java).
 findTheMostWidelyUsedWithTheHighestCost() method: Get the most widely used tag of a user with the highest cost of 
 all orders.
 
