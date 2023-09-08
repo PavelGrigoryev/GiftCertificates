@@ -1,0 +1,60 @@
+###findAll
+GET http://localhost:8080/gift_certificates
+Accept: application/json
+
+###findById
+GET http://localhost:8080/gift_certificates/1
+Accept: application/json
+
+###findAllWithTags
+GET http://localhost:8080/gift_certificates/findAllWithTags?tagName=Pepsi&part=Litt&sortBy=date&order=desc
+Accept: application/json
+
+###save
+POST http://localhost:8080/gift_certificates
+Content-Type: application/json
+
+{
+  "name": "Gift",
+  "description": "Very Big",
+  "price": 10.25,
+  "duration": 3,
+  "tags": [
+    {
+      "name": "Coca-cola"
+    },
+    {
+      "name": "Sprite"
+    }
+  ]
+}
+
+###update
+PUT http://localhost:8080/gift_certificates
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Salsa",
+  "description": "Little",
+  "price": 13.64,
+  "duration": 5,
+  "tags": [
+    {
+      "id": 1,
+      "name": "Pepsi"
+    },
+    {
+      "id": 2,
+      "name": "Mirinda"
+    },
+    {
+      "id": 3,
+      "name": "7-Up"
+    }
+  ]
+}
+
+###delete
+DELETE http://localhost:8080/gift_certificates/2
+Content-Type: application/json
